@@ -1,24 +1,24 @@
-# foodaily
+# Foodaily
 
-## Project setup
-```
-npm install
-```
+Foodaily is a API project for school. I used vue.js for front developement and google API (map, places).
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## Linter
 
-### Compiles and minifies for production
-```
-npm run build
-```
+* ESLint (https://eslint.org/)
+* - airbnb-base
+* - vue/essential
 
-### Lints and fixes files
-```
-npm run lint
-```
+## Built With
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+* [vue.js](https://vuejs.org/) - The Progressive JavaScript Framework
+* [Google Maps Platform](https://developers.google.com/maps/) - Used to generate Map
+
+## Authors
+
+* **Guyomar Alexis** - *Initial work* - [ga-devfront](https://github.com/ga-devfront)
+
+See also the list of [contributors](https://github.com/ga-devfront/foodaily-v2//contributors) who participated in this project.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
