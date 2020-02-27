@@ -1,11 +1,18 @@
 <template>
     <footer class="container column verticalCenter">
+        <p>Suivez-Nous</p>
+        <nav><Social /></nav>
     </footer>
 </template>
 
 <script>
+import Social from './Social.vue';
+
 export default {
   name: 'myFooter',
+  components: {
+    Social,
+  },
 };
 </script>
 
