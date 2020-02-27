@@ -1,5 +1,7 @@
 # Foodaily
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/850324c7f1d948b6ba887f8cf339def7)](https://app.codacy.com/manual/ga-devfront/foodaily-v2?utm_source=github.com&utm_medium=referral&utm_content=ga-devfront/foodaily-v2&utm_campaign=Badge_Grade_Settings)
+
 Foodaily is a API project for school. I used vue.js for front developement and google API (map, places).
 
 ## Linter
