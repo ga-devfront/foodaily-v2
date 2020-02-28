@@ -1,11 +1,20 @@
 <template>
-    <div class="social container center verticalCenter">
-    </div>
+  <li class="social container center verticalCenter">
+    <a :href="social.link">
+      <img :src="social.icon" :alt="social.alt" />
+    </a>
+  </li>
 </template>
 
 <script>
 export default {
   name: 'Social',
+  props: {
+    social: {
+      type: Object,
+      required: true,
+    },
+  },
 };
 </script>
 

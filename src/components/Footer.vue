@@ -1,11 +1,19 @@
 <template>
     <footer class="container column verticalCenter">
         <p>Suivez-Nous</p>
-        <nav><Social /></nav>
+        <nav class="container">
+          <ul>
+          <Social v-for="social in socials" :social="social" :key="social.name"/>
+          </ul>
+        </nav>
     </footer>
 </template>
 
 <script>
+import GithubIcon from '../assets/social/github.png';
+import FacebookIcon from '../assets/social/facebook.png';
+import InstragramIcon from '../assets/social/instagram.png';
+import TwitterIcon from '../assets/social/twitter.png';
 import Social from './Social.vue';
 
 export default {
@@ -13,10 +21,44 @@ export default {
   components: {
     Social,
   },
+  data() {
+    return {
+      socials: [
+        {
+          name: 'github',
+          link: 'https://github.com/ga-devfront/foodaily-v2/',
+          icon: GithubIcon,
+          alt: 'github',
+        },
+        {
+          name: 'facebook',
+          link: 'https://github.com/ga-devfront/foodaily-v2/',
+          icon: FacebookIcon,
+          alt: 'facebook',
+        },
+        {
+          name: 'instagram',
+          link: 'https://github.com/ga-devfront/foodaily-v2/',
+          icon: InstragramIcon,
+          alt: 'instagram',
+        },
+        {
+          name: 'twitter',
+          link: 'https://github.com/ga-devfront/foodaily-v2/',
+          icon: TwitterIcon,
+          alt: 'twitter',
+        },
+      ],
+    };
+  },
 };
 </script>
 
 <style scoped>
+nav a:hover {
+    cursor: pointer;
+}
+
 footer {
     position: absolute;
     bottom: -80px;
