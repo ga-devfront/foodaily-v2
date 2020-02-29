@@ -67,6 +67,18 @@ export default {
             justify-content: space-between;
 }
 
+.spaceBottom {
+    margin-bottom: 40px;
+}
+
+.spaceTop {
+    margin-top: 40px;
+}
+
+.big {
+    font-size: 2em;
+}
+
 .white {
     color: #ffffff;
 }

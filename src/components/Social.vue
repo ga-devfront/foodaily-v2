@@ -1,6 +1,6 @@
 <template>
   <li class="social container center verticalCenter">
-    <a :href="social.link">
+    <a :href="social.link" target="_blank">
       <img :src="social.icon" :alt="social.alt" />
     </a>
   </li>

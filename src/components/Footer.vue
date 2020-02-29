@@ -1,8 +1,8 @@
 <template>
     <footer class="container column verticalCenter">
         <p>Suivez-Nous</p>
-        <nav class="container">
-          <ul>
+        <nav>
+          <ul class="container center verticalCenter">
           <Social v-for="social in socials" :social="social" :key="social.name"/>
           </ul>
         </nav>
@@ -32,19 +32,19 @@ export default {
         },
         {
           name: 'facebook',
-          link: 'https://github.com/ga-devfront/foodaily-v2/',
+          link: 'https://www.facebook.com/agdevfront/',
           icon: FacebookIcon,
           alt: 'facebook',
         },
         {
           name: 'instagram',
-          link: 'https://github.com/ga-devfront/foodaily-v2/',
+          link: 'https://www.instagram.com/agdevfront/',
           icon: InstragramIcon,
           alt: 'instagram',
         },
         {
           name: 'twitter',
-          link: 'https://github.com/ga-devfront/foodaily-v2/',
+          link: 'https://twitter.com/AgDevfront',
           icon: TwitterIcon,
           alt: 'twitter',
         },
@@ -55,6 +55,10 @@ export default {
 </script>
 
 <style scoped>
+ul {
+  padding-inline-start: 0px
+}
+
 nav a:hover {
     cursor: pointer;
 }

@@ -1,22 +1,25 @@
 <template>
     <main class="container center column spaceBottom">
+      <SearchBar />
     </main>
 </template>
 
 <script>
+import SearchBar from './SearchBar.vue';
+
 export default {
   name: 'myMain',
+  components: {
+    SearchBar,
+  },
 };
 </script>
 
 <style scoped>
-footer {
-    position: absolute;
-    bottom: -80px;
-    min-width: 100%;
-    min-height: calc(60px + 40px);
-    background-color: #0067c0;
-    color: #ffffff;
+main {
+    position: relative;
+    bottom: -40px;
+    min-height: 100%;
     -webkit-transition: ease 1s;
     transition: ease 1s;
 }
