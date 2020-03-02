@@ -1,19 +1,42 @@
 <template>
     <main class="container center column spaceBottom">
-      <SearchBar />
-      <Features />
+      <section :is="step" v-on:search="setSearch"/>
     </main>
 </template>
 
 <script>
-import SearchBar from './SearchBar.vue';
-import Features from './Features.vue';
+import Step0 from './step/Step0.vue';
 
 export default {
   name: 'myMain',
   components: {
-    SearchBar,
-    Features,
+    Step0,
+  },
+  data() {
+    return {
+      steps: {
+        0: Step0,
+      },
+      currentStep: 0,
+      search: null,
+    };
+  },
+  computed: {
+    step() {
+      return this.steps[this.currentStep];
+    },
+  },
+  methods: {
+    setSearch(value) {
+      this.search = value;
+      this.incrementStep();
+    },
+    incrementStep() {
+      this.currentStep += 1;
+    },
+    decrementStep() {
+      this.currentStep -= 1;
+    },
   },
 };
 </script>

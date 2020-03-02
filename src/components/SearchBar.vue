@@ -5,15 +5,41 @@
             <label for="searchInput">
                 <img src="../assets/localisation.png" />
             </label>
-            <input id="searchInput" type="text" placeholder="Ville de recherche" autcomplete="on" />
-            <input id="searchBtn" type="button" value="Rechercher" class="white bold" />
+            <input
+                id="searchInput"
+                type="text"
+                placeholder="Ville de recherche"
+                v-model="searchValue"/>
+            <input
+                id="searchBtn"
+                type="button"
+                value="Rechercher"
+                class="white bold"
+                v-on:click="$emit('search', searchValue)"/>
         </form>
     </section>
 </template>
 
 <script>
+/* eslint-disable no-new */
 export default {
   name: 'searchBar',
+  data() {
+    return {
+      searchValue: null,
+    };
+  },
+  mounted() {
+    const options = {
+      types: ['(cities)'],
+      componentRestrictions: {
+        country: ['fr', 'ch'],
+      },
+    };
+    const input = document.getElementById('searchInput');
+    console.log(input);
+    new google.maps.places.Autocomplete(input, options);
+  },
 };
 </script>
 

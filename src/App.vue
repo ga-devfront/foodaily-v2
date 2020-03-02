@@ -1,9 +1,9 @@
 <template>
-  <div id="app" class="container column">
+  <body id="app" class="container column">
     <myHeader />
     <myMain />
     <myFooter />
-  </div>
+  </body>
 </template>
 
 <script>
