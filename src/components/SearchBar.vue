@@ -37,7 +37,7 @@ export default {
       },
     };
     const input = document.getElementById('searchInput');
-    console.log(input);
+    /* eslint-disable-next-line */
     new google.maps.places.Autocomplete(input, options);
   },
 };
