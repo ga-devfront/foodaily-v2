@@ -1,7 +1,7 @@
 <template>
     <main>
       <transition name="fade">
-        <section :is="step" v-on:search="setSearch" :research="search"/>
+        <section class="spaceBottom" :is="step" v-on:search="setSearch" :research="search"/>
       </transition>
     </main>
 </template>

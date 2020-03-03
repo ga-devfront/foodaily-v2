@@ -5,40 +5,46 @@
             <label for="searchInput">
                 <img src="../assets/localisation.png" />
             </label>
-            <input
+            <vue-google-autocomplete
+                ref="address"
                 id="searchInput"
-                type="text"
+                classname="form-control"
                 placeholder="Ville de recherche"
-                v-model="searchValue"/>
+                types="(cities)"
+                v-on:placechanged="getAddressData"
+                :country="['fr', 'ch']"
+            >
+            </vue-google-autocomplete>
             <input
                 id="searchBtn"
                 type="button"
                 value="Rechercher"
                 class="white bold"
-                v-on:click="$emit('search', searchValue)"/>
+                v-on:click="$emit('search', address)"/>
         </form>
     </section>
 </template>
 
 <script>
+import VueGoogleAutocomplete from 'vue-google-autocomplete';
 /* eslint-disable no-new */
 export default {
   name: 'searchBar',
   data() {
     return {
-      searchValue: null,
+      address: '',
     };
   },
-  mounted() {
-    const options = {
-      types: ['(cities)'],
-      componentRestrictions: {
-        country: ['fr', 'ch'],
-      },
-    };
-    const input = document.getElementById('searchInput');
-    /* eslint-disable-next-line */
-    new google.maps.places.Autocomplete(input, options);
+  components: {
+    VueGoogleAutocomplete,
+  },
+  methods: {
+    getAddressData(addressData) {
+      this.address = addressData;
+    },
+    mounted() {
+      this.$refs.address.focus();
+    },
   },
 };
 </script>
