@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="container center column">
         <SearchBar v-on:search="emitSearch"/>
         <Features />
     </div>

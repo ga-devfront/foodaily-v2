@@ -1,24 +1,27 @@
 <template>
-    <main class="container center column spaceBottom">
+    <main>
       <transition name="fade">
-        <section :is="step" v-on:search="setSearch"/>
+        <section :is="step" v-on:search="setSearch" :research="search"/>
       </transition>
     </main>
 </template>
 
 <script>
 import Step0 from './step/Step0.vue';
+import Step1 from './step/Step1.vue';
 
 export default {
   name: 'myMain',
   components: {
     Step0,
+    Step1,
   },
   data() {
     return {
-      steps: {
-        0: Step0,
-      },
+      steps: [
+        Step0,
+        Step1,
+      ],
       currentStep: 0,
       search: null,
     };
