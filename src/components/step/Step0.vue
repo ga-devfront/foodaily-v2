@@ -1,8 +1,8 @@
 <template>
-    <div class="container center column">
+    <section class="container center column">
         <SearchBar v-on:search="emitSearch"/>
         <Features />
-    </div>
+    </section>
 </template>
 
 <script>

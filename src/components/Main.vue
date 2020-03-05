@@ -1,7 +1,12 @@
 <template>
     <main>
-      <transition name="fade">
-        <section class="spaceBottom" :is="step" v-on:search="setSearch" :research="search"/>
+      <transition name="fade" mode="out-in">
+        <section
+        class="spaceBottom"
+        :is="step"
+        v-on:search="setSearch"
+        :research="search"
+        />
       </transition>
     </main>
 </template>
@@ -18,10 +23,10 @@ export default {
   },
   data() {
     return {
-      steps: [
-        Step0,
-        Step1,
-      ],
+      steps: {
+        0: Step0,
+        1: Step1,
+      },
       currentStep: 0,
       search: null,
     };
@@ -55,9 +60,10 @@ main {
 }
 
 .fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
+  transition: opacity .5s ease;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+.fade-enter, .fade-leave-to
+/* .component-fade-leave-active avant la 2.1.8 */ {
   opacity: 0;
 }
 </style>
