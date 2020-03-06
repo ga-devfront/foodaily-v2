@@ -70,7 +70,5 @@ footer {
     min-height: calc(60px + 40px);
     background-color: #0067c0;
     color: #ffffff;
-    -webkit-transition: ease 1s;
-    transition: ease 1s;
 }
 </style>

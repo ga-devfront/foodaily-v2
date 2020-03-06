@@ -4,6 +4,7 @@
         <section
         class="spaceBottom"
         :is="step"
+        v-on:return="returnStep"
         v-on:search="setSearch"
         :research="search"
         />
@@ -37,6 +38,10 @@ export default {
     },
   },
   methods: {
+    returnStep() {
+      this.search = '';
+      this.decrementStep();
+    },
     setSearch(value) {
       this.search = value;
       this.incrementStep();
@@ -57,6 +62,7 @@ main {
     min-height: 100%;
     -webkit-transition: ease 1s;
     transition: ease 1s;
+    padding-bottom: 20px;
 }
 
 .fade-enter-active, .fade-leave-active {
