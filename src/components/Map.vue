@@ -29,24 +29,15 @@ export default {
       map: null,
     };
   },
-  methods: {
-    setMap() {
-      const researchPos = { lat: this.city.latitude, lng: this.city.longitude };
-      return new Promise((resolveMap) => {
-        /* eslint-disable-next-line */
-        const map = new google.maps.Map(document.getElementById('map'), {
-          center: researchPos,
-          zoom: 16,
-          styles: CustomMap,
-        });
-        /* eslint-disable-next-line */
-        google.maps.event.addListenerOnce(map, 'idle', (data) => resolveMap(map));
-      });
+  watch: {
+    results(val) {
+      if (val.length) this.setMarker(val);
     },
-    async setMarker() {
+  },
+  methods: {
+    setMarker(restaurants) {
       let count = 0;
-      this.map = await this.setMap();
-      this.restaurants.forEach((place) => {
+      restaurants.forEach((place) => {
         count += 1;
         window.setTimeout(() => {
           /* eslint-disable-next-line */
@@ -59,9 +50,20 @@ export default {
         }, 200 * count);
       });
     },
+    async setMap() {
+      const researchPos = { lat: this.city.latitude, lng: this.city.longitude };
+      /* eslint-disable-next-line */
+      const map = await new google.maps.Map(document.getElementById('map'), {
+        center: researchPos,
+        zoom: 16,
+        styles: CustomMap,
+      });
+      this.map = map;
+      if (this.results.length) this.setMarker(this.results);
+    },
   },
   mounted() {
-    this.setMarker();
+    this.setMap();
   },
 };
 </script>
