@@ -1,7 +1,7 @@
 <template>
     <div id="mapContainer">
-      <div id="map">
-      </div>
+      <div id="map"></div>
+      <button id="addRestaurant" class="bold white">✚ ajouter un restaurant</button>
     </div>
 </template>
 
@@ -29,23 +29,39 @@ export default {
       map: null,
     };
   },
-  mounted() {
-    const researchPos = { lat: this.city.latitude, lng: this.city.longitude };
-    /* eslint-disable-next-line */
-    this.map = new google.maps.Map(document.getElementById('map'), {
-      center: researchPos,
-      zoom: 15,
-      styles: CustomMap,
-    });
-    this.restaurants.forEach((place) => {
-      /* eslint-disable-next-line */
-      new google.maps.Marker({
-        map: this.map,
-        position: place.geometry.location,
-        icon: MapIcon,
-        title: place.name,
+  methods: {
+    setMap() {
+      const researchPos = { lat: this.city.latitude, lng: this.city.longitude };
+      return new Promise((resolveMap) => {
+        /* eslint-disable-next-line */
+        const map = new google.maps.Map(document.getElementById('map'), {
+          center: researchPos,
+          zoom: 16,
+          styles: CustomMap,
+        });
+        /* eslint-disable-next-line */
+        google.maps.event.addListenerOnce(map, 'idle', (data) => resolveMap(map));
       });
-    });
+    },
+    async setMarker() {
+      let count = 0;
+      this.map = await this.setMap();
+      this.restaurants.forEach((place) => {
+        count += 1;
+        window.setTimeout(() => {
+          /* eslint-disable-next-line */
+          new google.maps.Marker({
+            map: this.map,
+            position: place.geometry.location,
+            icon: MapIcon,
+            title: place.name,
+          });
+        }, 200 * count);
+      });
+    },
+  },
+  mounted() {
+    this.setMarker();
   },
 };
 </script>
@@ -64,7 +80,21 @@ export default {
 }
 
 #map {
-  height: 580px;
+  height: 540px;
   width: 550px;
+}
+
+#addRestaurant {
+  border: none;
+  width: 550px;
+  height: 40px;
+  background: #0063bf;
+  -webkit-transition: 0.5s ease;
+  transition: 0.5s ease;
+}
+
+#addRestaurant:hover {
+    background-color: #007eea;
+    cursor: pointer;
 }
 </style>

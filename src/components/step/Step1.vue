@@ -3,7 +3,7 @@
       <aside id="resultName" class="container verticalCenter column center spaceBottom">
         <p class="big white bold">Restaurants à {{research.locality}}</p>
       </aside>
-      <article class="container center column width90">
+      <article class="container center column width75">
         <aside class="container between spaceBottom">
           <!-- eslint-disable-next-line -->
           <a 
@@ -13,8 +13,10 @@
           <p id="resultNumber" class="bold">{{results.length}} restaurants</p>
         </aside>
         <section class="container around">
-          <Map :restaurants="results" :research="city"/>
+          <Map :restaurants="results" :research="city" class="spaceRight"/>
           <section id="resultList" class="container column center">
+            <a class="bold white button littleSpaceBottom dropdown">☵ Filtrer</a>
+            <a class="bold white button littleSpaceBottom dropdown">⇆ Trier</a>
             <transition-group name="fade2" mode="out-in">
               <RestaurantCard
               v-for="restaurant in results"
@@ -80,29 +82,14 @@ export default {
     height: 150px;
 }
 
-.button {
-    background-color: #0067c0;
-    font-variant: small-caps;
-    font-size: 1.1em;
-    border-radius: 0.5em;
-    padding: 10px 20px 10px 20px;
-    -webkit-transition: ease 0.5s;
-    transition: ease 0.5s;
-}
-
-.button:hover {
-    background-color: #007eea;
-    cursor: pointer;
-}
-
 #resultNumber {
     line-height: 80%;
     color: #222222;
     font-style: italic;
 }
 
-.width90 {
-  width: 90%;
+.width75 {
+  min-width: 75%;
 }
 
 .fade2-enter-active, .fade2-leave-active {
@@ -111,5 +98,17 @@ export default {
 .fade2-enter, .fade2-leave-to
 /* .component-fade-leave-active avant la 2.1.8 */ {
   opacity: 0;
+}
+
+.button {
+  position: relative;
+}
+
+.button.dropdown::after {
+  content: "▼";
+  color: #ffffff;
+  position: absolute;
+  top: auto;
+  right: 10px;
 }
 </style>

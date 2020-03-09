@@ -71,8 +71,20 @@ export default {
     margin-bottom: 40px;
 }
 
+.littleSpaceBottom {
+    margin-bottom: 10px;
+}
+
 .spaceTop {
     margin-top: 40px;
+}
+
+.spaceLeft {
+    margin-left: 40px;
+}
+
+.spaceRight {
+    margin-right: 40px;
 }
 
 .big {
@@ -85,5 +97,20 @@ export default {
 
 .bold {
     font-weight: 700;
+}
+
+.button {
+    background-color: #0067c0;
+    font-variant: small-caps;
+    font-size: 1.1em;
+    border-radius: 0.5em;
+    padding: 10px 20px 10px 20px;
+    -webkit-transition: ease 0.5s;
+    transition: ease 0.5s;
+}
+
+.button:hover {
+    background-color: #007eea;
+    cursor: pointer;
 }
 </style>
