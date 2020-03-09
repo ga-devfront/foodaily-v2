@@ -1,9 +1,17 @@
 <template>
     <div class="container between littleRestaurant">
+      <div class="container containerImg">
+        <img :src="getImg"/>
+      </div>
+      <article class="description">
+        <h3>{{restaurant.name}}</h3>
+      </article>
     </div>
 </template>
 
 <script>
+import NoImg from '../assets/noPicture.jpg';
+
 export default {
   name: 'restaurantCard',
   props: {
@@ -11,6 +19,15 @@ export default {
       type: Object,
       required: true,
     },
+  },
+  computed: {
+    getImg() {
+      if (!this.restaurant.photos) return NoImg;
+      if (typeof this.restaurant.photos[0].getUrl !== 'function') return NoImg;
+      return this.restaurant.photos[0].getUrl();
+    },
+  },
+  methods: {
   },
 };
 </script>
