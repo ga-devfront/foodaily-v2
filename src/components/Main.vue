@@ -1,23 +1,32 @@
 <template>
-    <main class="container center column spaceBottom">
-      <transition name="fade">
-        <section :is="step" v-on:search="setSearch"/>
+    <main>
+      <transition name="fade" mode="out-in">
+        <section
+        class="spaceBottom"
+        :is="step"
+        v-on:return="returnStep"
+        v-on:search="setSearch"
+        :research="search"
+        />
       </transition>
     </main>
 </template>
 
 <script>
 import Step0 from './step/Step0.vue';
+import Step1 from './step/Step1.vue';
 
 export default {
   name: 'myMain',
   components: {
     Step0,
+    Step1,
   },
   data() {
     return {
       steps: {
         0: Step0,
+        1: Step1,
       },
       currentStep: 0,
       search: null,
@@ -29,6 +38,10 @@ export default {
     },
   },
   methods: {
+    returnStep() {
+      this.search = '';
+      this.decrementStep();
+    },
     setSearch(value) {
       this.search = value;
       this.incrementStep();
@@ -49,12 +62,14 @@ main {
     min-height: 100%;
     -webkit-transition: ease 1s;
     transition: ease 1s;
+    padding-bottom: 20px;
 }
 
 .fade-enter-active, .fade-leave-active {
-  transition: opacity .5s;
+  transition: opacity .5s ease;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+.fade-enter, .fade-leave-to
+/* .component-fade-leave-active avant la 2.1.8 */ {
   opacity: 0;
 }
 </style>
