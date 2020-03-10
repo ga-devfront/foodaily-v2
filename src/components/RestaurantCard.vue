@@ -5,15 +5,24 @@
       </div>
       <article class="description">
         <h3>{{restaurant.name}}</h3>
+        <p>{{restaurant.vicinity}}</p>
+        <div class="container around">
+          <Rating :restaurant="restaurant"/>
+          <a class="button bold white">Détails ▶</a>
+        </div>
       </article>
     </div>
 </template>
 
 <script>
 import NoImg from '../assets/noPicture.jpg';
+import Rating from './Rating.vue';
 
 export default {
-  name: 'restaurantCard',
+  name: 'RestaurantCard',
+  components: {
+    Rating,
+  },
   props: {
     restaurant: {
       type: Object,

@@ -32,7 +32,7 @@
 
 <script>
 import Map from '../Map.vue';
-import RestaurantCard from '../restaurantCard.vue';
+import RestaurantCard from '../RestaurantCard.vue';
 
 export default {
   name: 'Step1',
