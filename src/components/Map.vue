@@ -8,13 +8,11 @@
       à l'emplacement du restaurant à ajouter puis validez</aside>
       <div id="map"></div>
       <button
-      :ref="restaurantOk"
       class="bold white mapButton"
       v-on:click="creatNewRestaurant()"
       v-if="newRestaurant"
       >Valider</button>
       <button
-      :ref="addRestaurant"
       class="bold white mapButton"
       v-on:click="creatNewMarker()"
       v-if="!newRestaurant"
@@ -48,6 +46,14 @@ export default {
       map: null,
       newIcon: NewIcon,
       newMarker: null,
+      newRestaurantInfo: {
+        name: '',
+        geometry: { location: {} },
+        vicinity: '',
+        photos: [{ getUrl: null }],
+        rating: null,
+        user_ratings_total: null,
+      },
     };
   },
   watch: {
@@ -90,13 +96,31 @@ export default {
         position: researchPos,
         icon: NewIcon,
         draggable: true,
+        title: this.newRestaurantInfo.name,
       });
       this.newRestaurant = true;
     },
     creatNewRestaurant() {
       this.newRestaurant = false;
-      this.newMarker.draggable = false;
-      this.newMarker.icon = MapIcon;
+      this.newMarker.setDraggable(false);
+      this.newMarker.setIcon(MapIcon);
+      this.newRestaurantInfo.geometry.location = {
+        lat: this.newMarker.getPosition().lat(),
+        lng: this.newMarker.getPosition().lng(),
+      };
+      /* eslint-disable-next-line */
+      const geocoder = new google.maps.Geocoder;
+      this.getAdress(geocoder);
+    },
+    getAdress(geocoder) {
+      const latlng = this.newRestaurantInfo.coord;
+      geocoder.geocode({ location: latlng }, (results, status) => {
+        if (status === 'OK') {
+          if (results[0]) {
+            this.newRestaurantInfo.vicinity = results[0].formatted_address;
+          }
+        }console.log(this.newRestaurantInfo.adress);
+      });
     },
   },
   mounted() {
