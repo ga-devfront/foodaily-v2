@@ -13,7 +13,10 @@
           <p id="resultNumber" class="bold">{{results.length}} restaurants</p>
         </aside>
         <section class="container around">
-          <Map :restaurants="results" :research="city" class="spaceRight"/>
+          <Map
+          :restaurants="results"
+          :research="city" class="spaceRight"
+          v-on:newRestaurant="addRestaurant"/>
           <section id="resultList" class="container column center">
             <a class="bold white button littleSpaceBottom dropdown">☵ Filtrer</a>
             <a class="bold white button littleSpaceBottom dropdown">⇆ Trier</a>
@@ -53,6 +56,9 @@ export default {
     };
   },
   methods: {
+    addRestaurant(value) {
+      this.results.push(value);
+    },
   },
   created() {
     /* eslint-disable-next-line */

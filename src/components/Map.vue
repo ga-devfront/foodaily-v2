@@ -1,11 +1,60 @@
 <template>
     <div id="mapContainer">
       <aside
-      class="overlay white container center verticalCenter"
-      v-if="newRestaurant"
-      >Déplacer l'icone
+      class="overlay top white container center verticalCenter"
+      v-if="newRestaurant">
+      Déplacer l'icone
       <img :src="newIcon" class="bodrerRL"/>
       à l'emplacement du restaurant à ajouter puis validez</aside>
+
+      <aside
+      class="overlay all white container center verticalCenter"
+      v-if="addNewRestaurant">
+        <form class="container column between">
+          <p class="big">Informations du restaurant</p>
+          <div class="container between verticalCenter">
+            <label for="restaurantName">Nom du restaurant</label>
+            <input
+            class="input"
+            type="text"
+            name="restaurantName"
+            id="name"
+            required>
+          </div>
+          <div class="container between verticalCenter">
+            <label for="address">Adresse</label>
+            <input
+            class="input"
+            type="address"
+            name="address"
+            id="address"
+            :value="newRestaurantInfo.vicinity"
+            required>
+          </div>
+          <div class="container between verticalCenter">
+            <label for="image">Photo</label>
+            <input
+            class="input"
+            type="file"
+            name="image"
+            id="image"
+            required>
+          </div>
+          <div class="container between verticalCenter">
+            <input
+            type="button"
+            class="button white bold"
+            value="Valider"
+            v-on:click="addRestaurant()">
+            <input
+            type="button"
+            class="button white bold"
+            value="Annuler"
+            v-on:click="abort()">
+          </div>
+        </form>
+      </aside>
+
       <div id="map"></div>
       <button
       class="bold white mapButton"
@@ -41,6 +90,7 @@ export default {
   data() {
     return {
       newRestaurant: false,
+      addNewRestaurant: false,
       city: this.research,
       results: this.restaurants,
       map: null,
@@ -96,7 +146,7 @@ export default {
         position: researchPos,
         icon: NewIcon,
         draggable: true,
-        title: this.newRestaurantInfo.name,
+        title: 'déplacez moi !',
       });
       this.newRestaurant = true;
     },
@@ -113,14 +163,56 @@ export default {
       this.getAdress(geocoder);
     },
     getAdress(geocoder) {
-      const latlng = this.newRestaurantInfo.coord;
+      const latlng = this.newRestaurantInfo.geometry.location;
       geocoder.geocode({ location: latlng }, (results, status) => {
         if (status === 'OK') {
           if (results[0]) {
             this.newRestaurantInfo.vicinity = results[0].formatted_address;
+            this.newMarker.setMap(null);
+            this.newMarker = null;
+            this.addNewRestaurant = true;
+          } else {
+            this.newRestaurantInfo.vicinity = null;
+            this.newMarker.setMap(null);
+            this.newMarker = null;
+            this.addNewRestaurant = true;
           }
-        }console.log(this.newRestaurantInfo.adress);
+        }
       });
+    },
+    async getCityPos(address) {
+      /* eslint-disable-next-line */
+      const geocoder = new google.maps.Geocoder();
+      const cityPos = new Promise((resolveGeo) => {
+        geocoder.geocode({
+          address,
+        }, (results, status) => {
+          if (status === 'OK') {
+            resolveGeo(results[0].geometry.location);
+          }
+        });
+      });
+      return cityPos;
+    },
+    async addRestaurant() {
+      this.newRestaurantInfo.name = document.getElementById('name').value;
+      this.newRestaurantInfo.vicinity = document.getElementById('address').value;
+      // eslint-disable-next-line
+      this.newRestaurantInfo.geometry.location = await this.getCityPos(document.getElementById('address').value);
+      this.newRestaurantInfo.photos[0].getUrl = () => document.getElementById('image').value;
+      this.addNewRestaurant = false;
+      this.$emit('newRestaurant', this.newRestaurantInfo);
+      this.resertNewRestaurant();
+    },
+    abort() {
+      this.addNewRestaurant = false;
+      this.resertNewRestaurant();
+    },
+    resertNewRestaurant() {
+      this.newRestaurantInfo.name = null;
+      this.newRestaurantInfo.geometry.location = {};
+      this.newRestaurantInfo.vicinity = null;
+      this.newRestaurantInfo.photos[0].getUrl = null;
     },
   },
   mounted() {
@@ -130,6 +222,12 @@ export default {
 </script>
 
 <style scoped>
+form {
+  font-size: 1.4em;
+  width: 80%;
+  height: 65%;
+}
+
 #mapContainer {
   position: sticky;
   top: 40px;
@@ -146,6 +244,15 @@ export default {
   z-index: 0;
   height: 540px;
   width: 550px;
+}
+
+.input {
+    border: 0px;
+    border-radius: 20px;
+    padding-left: 10px;
+    margin-left: 5px;
+    width: 80%;
+    height: 30px;
 }
 
 .mapButton {
@@ -165,9 +272,17 @@ export default {
 .overlay {
   z-index: 1;
   position: absolute;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.overlay.top{
   width: 550px;
   height: 50px;
-  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.overlay.all{
+  width: 550px;
+  height: 580px;
 }
 
 .bodrerRL {
