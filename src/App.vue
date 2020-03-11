@@ -95,6 +95,10 @@ export default {
     color: #ffffff;
 }
 
+.red {
+    color: #bc1f00;
+}
+
 .bold {
     font-weight: 700;
 }

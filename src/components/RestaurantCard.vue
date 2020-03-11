@@ -32,8 +32,11 @@ export default {
   computed: {
     getImg() {
       if (!this.restaurant.photos) return NoImg;
-      if (typeof this.restaurant.photos[0].getUrl !== 'function') return NoImg;
-      return this.restaurant.photos[0].getUrl();
+      if (typeof this.restaurant.photos[0].getUrl === 'function') {
+        return this.restaurant.photos[0].getUrl();
+      } if (typeof this.restaurant.photos[0].getUrl === 'string') {
+        return this.restaurant.photos[0].getUrl;
+      } return NoImg;
     },
   },
   methods: {

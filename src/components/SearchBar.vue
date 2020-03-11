@@ -42,9 +42,9 @@ export default {
     getAddressData(addressData) {
       this.address = addressData;
     },
-    mounted() {
-      this.$refs.address.focus();
-    },
+  },
+  mounted() {
+    this.$refs.address.focus();
   },
 };
 </script>
