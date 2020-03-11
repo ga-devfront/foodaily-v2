@@ -1,7 +1,24 @@
 <template>
     <div id="mapContainer">
+      <aside
+      class="overlay white container center verticalCenter"
+      v-if="newRestaurant"
+      >Déplacer l'icone
+      <img :src="newIcon" class="bodrerRL"/>
+      à l'emplacement du restaurant à ajouter puis validez</aside>
       <div id="map"></div>
-      <button id="addRestaurant" class="bold white">✚ ajouter un restaurant</button>
+      <button
+      :ref="restaurantOk"
+      class="bold white mapButton"
+      v-on:click="creatNewRestaurant()"
+      v-if="newRestaurant"
+      >Valider</button>
+      <button
+      :ref="addRestaurant"
+      class="bold white mapButton"
+      v-on:click="creatNewMarker()"
+      v-if="!newRestaurant"
+      >✚ ajouter un restaurant</button>
     </div>
 </template>
 
@@ -9,6 +26,7 @@
 /* eslint-disable-next-line */
 import CustomMap from '../../public/customMap.js';
 import MapIcon from '../assets/icon.png';
+import NewIcon from '../assets/iconRed.png';
 
 export default {
   name: 'Map',
@@ -24,9 +42,12 @@ export default {
   },
   data() {
     return {
+      newRestaurant: false,
       city: this.research,
       results: this.restaurants,
       map: null,
+      newIcon: NewIcon,
+      newMarker: null,
     };
   },
   watch: {
@@ -61,6 +82,22 @@ export default {
       this.map = map;
       if (this.results.length) this.setMarker(this.results);
     },
+    creatNewMarker() {
+      const researchPos = { lat: this.city.latitude, lng: this.city.longitude };
+      /* eslint-disable-next-line */
+      this.newMarker = new google.maps.Marker({
+        map: this.map,
+        position: researchPos,
+        icon: NewIcon,
+        draggable: true,
+      });
+      this.newRestaurant = true;
+    },
+    creatNewRestaurant() {
+      this.newRestaurant = false;
+      this.newMarker.draggable = false;
+      this.newMarker.icon = MapIcon;
+    },
   },
   mounted() {
     this.setMap();
@@ -82,11 +119,12 @@ export default {
 }
 
 #map {
+  z-index: 0;
   height: 540px;
   width: 550px;
 }
 
-#addRestaurant {
+.mapButton {
   border: none;
   width: 550px;
   height: 40px;
@@ -95,8 +133,21 @@ export default {
   transition: 0.5s ease;
 }
 
-#addRestaurant:hover {
+.mapButton:hover {
     background-color: #007eea;
     cursor: pointer;
+}
+
+.overlay {
+  z-index: 1;
+  position: absolute;
+  width: 550px;
+  height: 50px;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.bodrerRL {
+  margin-left: 5px;
+  margin-right: 5px;
 }
 </style>
