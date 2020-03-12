@@ -1,6 +1,7 @@
 <template>
     <section id="search" class="container verticalCenter column center">
         <p class="big white bold spaceBottom">Trouver le restaurant qui vous correspond</p>
+        <p v-if="error" class="red error bold">Veuillez rentrer une adresse correcte !</p>
         <form class="shadowBar container verticalCenter">
             <label for="searchInput">
                 <img src="../assets/localisation.png" />
@@ -13,14 +14,14 @@
                 types="(cities)"
                 v-on:placechanged="getAddressData"
                 :country="['fr', 'ch']"
-            >
+                no-results-found>
             </vue-google-autocomplete>
             <input
                 id="searchBtn"
                 type="button"
                 value="Rechercher"
                 class="white bold"
-                v-on:click="$emit('search', address)"/>
+                v-on:click="emitSearch(address)"/>
         </form>
     </section>
 </template>
@@ -33,6 +34,7 @@ export default {
   data() {
     return {
       address: '',
+      error: false,
     };
   },
   components: {
@@ -41,6 +43,11 @@ export default {
   methods: {
     getAddressData(addressData) {
       this.address = addressData;
+    },
+    emitSearch(value) {
+      this.error = false;
+      this.$emit('search', value);
+      this.error = true;
     },
   },
   mounted() {

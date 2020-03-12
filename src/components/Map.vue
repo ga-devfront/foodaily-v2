@@ -224,7 +224,7 @@ export default {
         this.errorMessage = 'Merci d\'ajouter une photo valide';
         return;
       }
-      const files = document.getElementById('image').files
+      const { files } = document.getElementById('image');
       if (FileReader && files && files.length) {
         const img = new FileReader();
         const imageResult = new Promise((resolve) => {
@@ -331,14 +331,5 @@ form {
 .bodrerRL {
   margin-left: 5px;
   margin-right: 5px;
-}
-
-.error {
-  margin-top: -30px;
-  padding: 3px;
-  background: rgba(0, 0, 0, 0.7);
-  text-align: center;
-  font-size: 0.8em;
-  font-style: italic;
 }
 </style>

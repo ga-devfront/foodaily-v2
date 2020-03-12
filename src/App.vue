@@ -117,4 +117,13 @@ export default {
     background-color: #007eea;
     cursor: pointer;
 }
+
+.error {
+  margin-top: -30px;
+  padding: 5px;
+  background: rgba(0, 0, 0, 0.8);
+  text-align: center;
+  font-size: 0.8em;
+  font-style: italic;
+}
 </style>
