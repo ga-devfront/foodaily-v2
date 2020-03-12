@@ -7,54 +7,11 @@
       <img :src="newIcon" class="bodrerRL"/>
       à l'emplacement du restaurant à ajouter puis validez</aside>
 
-      <aside
-      class="overlay all white container center verticalCenter"
-      v-if="displayNewRestaurantForm">
-        <form type="submit" class="container column between">
-          <p class="big">Informations du restaurant</p>
-          <p v-if="error" class="red error bold">{{errorMessage}}</p>
-          <div class="container between verticalCenter">
-            <label for="restaurantName">Nom du restaurant</label>
-            <input
-            class="input"
-            type="text"
-            name="restaurantName"
-            id="name"
-            required>
-          </div>
-          <div class="container between verticalCenter">
-            <label for="address">Adresse</label>
-            <input
-            class="input"
-            type="address"
-            name="address"
-            id="address"
-            :value="newRestaurantInfo.vicinity"
-            required>
-          </div>
-          <div class="container between verticalCenter">
-            <label for="image">Photo</label>
-            <input
-            class="input"
-            type="file"
-            name="image"
-            id="image"
-            required>
-          </div>
-          <div class="container between verticalCenter">
-            <input
-            type="button"
-            class="button white bold"
-            value="Valider"
-            v-on:click="addRestaurant()">
-            <input
-            type="button"
-            class="button white bold"
-            value="Annuler"
-            v-on:click="abort()">
-          </div>
-        </form>
-      </aside>
+      <NewRestaurantForm
+      v-if="displayNewRestaurantForm"
+      :infos="newRestaurantInfo"
+      v-on:abort="abort"
+      v-on:newRestaurant="emitNewRestaurant"/>
 
       <div id="map"></div>
       <button
@@ -75,6 +32,7 @@
 import CustomMap from '../../public/customMap.js';
 import MapIcon from '../assets/icon.png';
 import NewIcon from '../assets/iconRed.png';
+import NewRestaurantForm from './NewRestaurantForm.vue';
 
 export default {
   name: 'Map',
@@ -88,24 +46,21 @@ export default {
       required: true,
     },
   },
+  components: {
+    NewRestaurantForm,
+  },
   data() {
     return {
       addNewRestaurant: false,
       displayNewRestaurantForm: false,
-      error: false,
-      errorMessage: null,
       city: this.research,
       results: this.restaurants,
       map: null,
       newIcon: NewIcon,
       newMarker: null,
       newRestaurantInfo: {
-        name: '',
         geometry: { location: {} },
         vicinity: '',
-        photos: [{ getUrl: null }],
-        rating: null,
-        user_ratings_total: null,
       },
     };
   },
@@ -131,7 +86,7 @@ export default {
       });
     },
     async setMap() {
-      const researchPos = { lat: this.city.latitude, lng: this.city.longitude };
+      const researchPos = { lat: this.research.latitude, lng: this.research.longitude };
       /* eslint-disable-next-line */
       const map = await new google.maps.Map(document.getElementById('map'), {
         center: researchPos,
@@ -142,7 +97,7 @@ export default {
       if (this.results.length) this.setMarker(this.results);
     },
     creatNewMarker() {
-      const researchPos = { lat: this.city.latitude, lng: this.city.longitude };
+      const researchPos = { lat: this.research.latitude, lng: this.research.longitude };
       /* eslint-disable-next-line */
       this.newMarker = new google.maps.Marker({
         map: this.map,
@@ -184,74 +139,12 @@ export default {
       this.newMarker = null;
       this.displayNewRestaurantForm = true;
     },
-    async getCityPos(address) {
-      /* eslint-disable-next-line */
-      const geocoder = new google.maps.Geocoder();
-      const cityPos = new Promise((resolveGeo) => {
-        geocoder.geocode({
-          address,
-        }, (results, status) => {
-          if (status === 'OK') {
-            resolveGeo(results[0].geometry.location);
-          }
-        });
-      });
-      return cityPos;
-    },
-    async addRestaurant() {
-      this.newRestaurantInfo.geometry.location = null;
-      if (document.getElementById('address').value.length < 1) {
-        this.error = true;
-        this.errorMessage = 'Merci d\'entrer une adresse valide';
-        return;
-      }
-      this.newRestaurantInfo.vicinity = document.getElementById('address').value;
-      this.newRestaurantInfo.geometry.location = await this.getCityPos(document.getElementById('address').value);
-      console.log(JSON.parse(JSON.stringify(this.newRestaurantInfo.geometry.location)));
-      if (!this.newRestaurantInfo.geometry.location) {
-        this.error = true;
-        this.errorMessage = 'Merci d\'entrer une adresse valide';
-        return;
-      }
-      if (document.getElementById('name').value.length < 1) {
-        this.error = true;
-        this.errorMessage = 'Merci d\'entrer un nom de restaurant valide';
-        return;
-      }
-      this.newRestaurantInfo.name = document.getElementById('name').value;
-      if (document.getElementById('image').value.length < 1) {
-        this.error = true;
-        this.errorMessage = 'Merci d\'ajouter une photo valide';
-        return;
-      }
-      const { files } = document.getElementById('image');
-      if (FileReader && files && files.length) {
-        const img = new FileReader();
-        const imageResult = new Promise((resolve) => {
-          img.onload = () => {
-            resolve(img.result);
-          };
-        });
-        img.readAsDataURL(files[0]);
-        this.newRestaurantInfo.photos[0].getUrl = await imageResult;
-      }
-      const newRestaurantInfo = JSON.parse(JSON.stringify(this.newRestaurantInfo));
-      this.displayNewRestaurantForm = false;
-      this.error = false;
-      this.resetNewRestaurant();
-      console.log('newRestaurantInfo', JSON.parse(JSON.stringify(newRestaurantInfo)));
-      this.$emit('newRestaurant', newRestaurantInfo);
-    },
     abort() {
-      this.error = false;
       this.displayNewRestaurantForm = false;
-      this.resetNewRestaurant();
     },
-    resetNewRestaurant() {
-      this.newRestaurantInfo.name = null;
-      this.newRestaurantInfo.geometry.location = {};
-      this.newRestaurantInfo.vicinity = null;
-      this.newRestaurantInfo.photos[0].getUrl = null;
+    emitNewRestaurant(value) {
+      this.$emit('newRestaurant', value);
+      this.displayNewRestaurantForm = false;
     },
   },
   mounted() {
@@ -285,19 +178,6 @@ form {
   width: 550px;
 }
 
-.input {
-    border: 0px;
-    border-radius: 20px;
-    padding-left: 10px;
-    margin-left: 5px;
-    width: 80%;
-    height: 30px;
-}
-
-.input:focus {
-    outline: 0;
-}
-
 .mapButton {
   border: none;
   width: 550px;
@@ -310,26 +190,5 @@ form {
 .mapButton:hover {
     background-color: #007eea;
     cursor: pointer;
-}
-
-.overlay {
-  z-index: 1;
-  position: absolute;
-  background-color: rgba(0, 0, 0, 0.7);
-}
-
-.overlay.top{
-  width: 550px;
-  height: 50px;
-}
-
-.overlay.all{
-  width: 550px;
-  height: 580px;
-}
-
-.bodrerRL {
-  margin-left: 5px;
-  margin-right: 5px;
 }
 </style>

@@ -45,6 +45,11 @@ export default {
 </script>
 
 <style scoped>
+p {
+  margin-block-end: 0.5em;
+  margin-block-start: 0.5em;
+}
+
 .littleRestaurant {
     width: 500px;
     height: 130px;

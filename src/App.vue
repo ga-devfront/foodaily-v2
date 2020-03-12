@@ -126,4 +126,25 @@ export default {
   font-size: 0.8em;
   font-style: italic;
 }
+
+.overlay {
+  z-index: 1;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.overlay.top{
+  width: 550px;
+  height: 50px;
+}
+
+.overlay.all{
+  width: 550px;
+  height: 580px;
+}
+
+.bodrerRL {
+  margin-left: 5px;
+  margin-right: 5px;
+}
 </style>
