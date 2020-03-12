@@ -1,7 +1,29 @@
 <template>
     <div id="mapContainer">
+      <aside
+      class="overlay top white container center verticalCenter"
+      v-if="addNewRestaurant">
+      Déplacer l'icone
+      <img :src="newIcon" class="bodrerRL"/>
+      à l'emplacement du restaurant à ajouter puis validez</aside>
+
+      <NewRestaurantForm
+      v-if="displayNewRestaurantForm"
+      :infos="newRestaurantInfo"
+      v-on:abort="abort"
+      v-on:newRestaurant="emitNewRestaurant"/>
+
       <div id="map"></div>
-      <button id="addRestaurant" class="bold white">✚ ajouter un restaurant</button>
+      <button
+      class="bold white mapButton"
+      v-on:click="creatNewRestaurant()"
+      v-if="addNewRestaurant"
+      >Valider</button>
+      <button
+      class="bold white mapButton"
+      v-on:click="creatNewMarker()"
+      v-if="!addNewRestaurant"
+      >✚ ajouter un restaurant</button>
     </div>
 </template>
 
@@ -9,6 +31,8 @@
 /* eslint-disable-next-line */
 import CustomMap from '../../public/customMap.js';
 import MapIcon from '../assets/icon.png';
+import NewIcon from '../assets/iconRed.png';
+import NewRestaurantForm from './NewRestaurantForm.vue';
 
 export default {
   name: 'Map',
@@ -22,11 +46,22 @@ export default {
       required: true,
     },
   },
+  components: {
+    NewRestaurantForm,
+  },
   data() {
     return {
+      addNewRestaurant: false,
+      displayNewRestaurantForm: false,
       city: this.research,
       results: this.restaurants,
       map: null,
+      newIcon: NewIcon,
+      newMarker: null,
+      newRestaurantInfo: {
+        geometry: { location: {} },
+        vicinity: '',
+      },
     };
   },
   watch: {
@@ -51,7 +86,7 @@ export default {
       });
     },
     async setMap() {
-      const researchPos = { lat: this.city.latitude, lng: this.city.longitude };
+      const researchPos = { lat: this.research.latitude, lng: this.research.longitude };
       /* eslint-disable-next-line */
       const map = await new google.maps.Map(document.getElementById('map'), {
         center: researchPos,
@@ -61,6 +96,56 @@ export default {
       this.map = map;
       if (this.results.length) this.setMarker(this.results);
     },
+    creatNewMarker() {
+      const researchPos = { lat: this.research.latitude, lng: this.research.longitude };
+      /* eslint-disable-next-line */
+      this.newMarker = new google.maps.Marker({
+        map: this.map,
+        position: researchPos,
+        icon: NewIcon,
+        draggable: true,
+        title: 'déplacez moi !',
+      });
+      this.addNewRestaurant = true;
+    },
+    creatNewRestaurant() {
+      this.addNewRestaurant = false;
+      this.newMarker.setDraggable(false);
+      this.newMarker.setIcon(MapIcon);
+      this.newRestaurantInfo.geometry.location = {
+        lat: this.newMarker.getPosition().lat(),
+        lng: this.newMarker.getPosition().lng(),
+      };
+      /* eslint-disable-next-line */
+      const geocoder = new google.maps.Geocoder;
+      this.getAdress(geocoder);
+    },
+    getAdress(geocoder) {
+      const latlng = this.newRestaurantInfo.geometry.location;
+      geocoder.geocode({ location: latlng }, (results, status) => {
+        if (status === 'OK') {
+          if (results[0]) {
+            this.newRestaurantInfo.vicinity = results[0].formatted_address;
+            this.nextStepNewRestaurant();
+          } else {
+            this.newRestaurantInfo.vicinity = null;
+            this.nextStepNewRestaurant();
+          }
+        }
+      });
+    },
+    nextStepNewRestaurant() {
+      this.newMarker.setMap(null);
+      this.newMarker = null;
+      this.displayNewRestaurantForm = true;
+    },
+    abort() {
+      this.displayNewRestaurantForm = false;
+    },
+    emitNewRestaurant(value) {
+      this.$emit('newRestaurant', value);
+      this.displayNewRestaurantForm = false;
+    },
   },
   mounted() {
     this.setMap();
@@ -69,6 +154,12 @@ export default {
 </script>
 
 <style scoped>
+form {
+  font-size: 1.4em;
+  width: 80%;
+  height: 65%;
+}
+
 #mapContainer {
   position: sticky;
   top: 40px;
@@ -82,11 +173,12 @@ export default {
 }
 
 #map {
+  z-index: 0;
   height: 540px;
   width: 550px;
 }
 
-#addRestaurant {
+.mapButton {
   border: none;
   width: 550px;
   height: 40px;
@@ -95,7 +187,7 @@ export default {
   transition: 0.5s ease;
 }
 
-#addRestaurant:hover {
+.mapButton:hover {
     background-color: #007eea;
     cursor: pointer;
 }

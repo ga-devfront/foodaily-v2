@@ -95,6 +95,10 @@ export default {
     color: #ffffff;
 }
 
+.red {
+    color: #bc1f00;
+}
+
 .bold {
     font-weight: 700;
 }
@@ -112,5 +116,35 @@ export default {
 .button:hover {
     background-color: #007eea;
     cursor: pointer;
+}
+
+.error {
+  margin-top: -30px;
+  padding: 5px;
+  background: rgba(0, 0, 0, 0.8);
+  text-align: center;
+  font-size: 0.8em;
+  font-style: italic;
+}
+
+.overlay {
+  z-index: 1;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.overlay.top{
+  width: 550px;
+  height: 50px;
+}
+
+.overlay.all{
+  width: 550px;
+  height: 580px;
+}
+
+.bodrerRL {
+  margin-left: 5px;
+  margin-right: 5px;
 }
 </style>

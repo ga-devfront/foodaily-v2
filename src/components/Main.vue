@@ -43,6 +43,7 @@ export default {
       this.decrementStep();
     },
     setSearch(value) {
+      if (!value) { return; }
       this.search = value;
       this.incrementStep();
     },
