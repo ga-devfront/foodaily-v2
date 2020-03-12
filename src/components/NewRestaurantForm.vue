@@ -15,13 +15,17 @@
           </div>
           <div class="container between verticalCenter">
             <label for="address">Adresse</label>
-            <input
-            class="input"
-            type="address"
-            name="address"
-            id="address"
-            :value="infos.vicinity"
-            required>
+            <vue-google-autocomplete
+                class="input"
+                ref="address"
+                id="address"
+                classname="address"
+                :value="infos.vicinity"
+                v-on:placechanged="setAddressData"
+                types="address"
+                :country="['fr', 'ch']"
+                no-results-found>
+            </vue-google-autocomplete>
           </div>
           <div class="container between verticalCenter">
             <label for="image">Photo</label>
@@ -49,6 +53,7 @@
 </template>
 
 <script>
+import VueGoogleAutocomplete from 'vue-google-autocomplete';
 
 export default {
   name: 'Map',
@@ -58,13 +63,16 @@ export default {
       required: true,
     },
   },
+  components: {
+    VueGoogleAutocomplete,
+  },
   data() {
     return {
       error: false,
       errorMessage: null,
       newRestaurantInfo: {
         name: '',
-        geometry: { location: {} },
+        geometry: { location: null },
         vicinity: '',
         photos: [{ getUrl: null }],
         rating: null,
@@ -73,6 +81,14 @@ export default {
     };
   },
   methods: {
+    setAddressData(addressData) {
+      this.newRestaurantInfo.geometry.location = {
+        lat: addressData.latitude,
+        lng: addressData.longitude,
+      };
+      this.newRestaurantInfo.vicinity = `${addressData.street_number} ${addressData.route}, ${addressData.locality}`;
+      console.log(addressData);
+    },
     async getCityPos(address) {
       /* eslint-disable-next-line */
       const geocoder = new google.maps.Geocoder();
@@ -88,15 +104,6 @@ export default {
       return cityPos;
     },
     async addRestaurant() {
-      this.newRestaurantInfo.geometry.location = null;
-      if (document.getElementById('address').value.length < 1) {
-        this.error = true;
-        this.errorMessage = 'Merci d\'entrer une adresse valide';
-        return;
-      }
-      this.newRestaurantInfo.vicinity = document.getElementById('address').value;
-      this.newRestaurantInfo.geometry.location = await this.getCityPos(document.getElementById('address').value);
-      console.log(JSON.parse(JSON.stringify(this.newRestaurantInfo.geometry.location)));
       if (!this.newRestaurantInfo.geometry.location) {
         this.error = true;
         this.errorMessage = 'Merci d\'entrer une adresse valide';
@@ -127,7 +134,6 @@ export default {
       const newRestaurantInfo = JSON.parse(JSON.stringify(this.newRestaurantInfo));
       this.error = false;
       this.resetNewRestaurant();
-      console.log('newRestaurantInfo', JSON.parse(JSON.stringify(newRestaurantInfo)));
       this.$emit('newRestaurant', newRestaurantInfo);
     },
     abort() {

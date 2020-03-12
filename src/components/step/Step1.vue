@@ -57,8 +57,6 @@ export default {
   },
   methods: {
     addRestaurant(value) {
-      console.log('value', value);
-      console.log(JSON.parse(JSON.stringify(value)));
       this.results.push(value);
     },
   },
