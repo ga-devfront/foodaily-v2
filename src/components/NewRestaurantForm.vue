@@ -86,7 +86,11 @@ export default {
         lat: addressData.latitude,
         lng: addressData.longitude,
       };
-      this.newRestaurantInfo.vicinity = `${addressData.street_number} ${addressData.route}, ${addressData.locality}`;
+      let streetNumber;
+      if (addressData.street_number) {
+        streetNumber = addressData.street_number;
+      } else { streetNumber = ''; }
+      this.newRestaurantInfo.vicinity = `${streetNumber} ${addressData.route}, ${addressData.locality}`;
     },
     async getCityPos(address) {
       /* eslint-disable-next-line */
