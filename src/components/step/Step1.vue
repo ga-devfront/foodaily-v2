@@ -10,19 +10,27 @@
           class="bold white button"
           v-on:click="$emit('return')"
           >← Retour</a>
-          <p id="resultNumber" class="bold">{{results.length}} restaurants</p>
+          <p id="resultNumber" class="bold">{{restaurants.length}} restaurants</p>
         </aside>
         <section class="container around">
           <Map
-          :restaurants="results"
+          :restaurants="restaurants"
           :research="city" class="spaceRight"
           v-on:newRestaurant="addRestaurant"/>
           <section id="resultList" class="container column center">
-            <a class="bold white button littleSpaceBottom dropdown">☵ Filtrer</a>
-            <a class="bold white button littleSpaceBottom dropdown">⇆ Trier</a>
+            <a
+              class="bold white button littleSpaceBottom dropdown"
+              v-on:click="displayFilter()">☵ Filtrer
+            </a>
+            <FilterResult v-if="filterOption"/>
+            <a
+              class="bold white button littleSpaceBottom dropdown"
+              v-on:click="displaySort()">⇆ Trier
+            </a>
+            <Sort v-if="sortOption" v-on:orderType="changeOrderType"/>
             <transition-group name="fade2" mode="out-in">
               <RestaurantCard
-              v-for="restaurant in results"
+              v-for="restaurant in displayedRestaurants"
               :restaurant="restaurant"
               :key="restaurant.name"
               />
@@ -36,12 +44,16 @@
 <script>
 import Map from '../Map.vue';
 import RestaurantCard from '../RestaurantCard.vue';
+import FilterResult from '../FilterResult.vue';
+import Sort from '../Sort.vue';
 
 export default {
   name: 'Step1',
   components: {
     Map,
     RestaurantCard,
+    FilterResult,
+    Sort,
   },
   props: {
     research: {
@@ -51,13 +63,66 @@ export default {
   },
   data() {
     return {
+      filterOption: false,
+      sortOption: false,
       city: this.research,
-      results: [],
+      restaurants: [],
+      orders: {
+        none(restaurants) {
+          return restaurants;
+        },
+        byAZ(restaurants) {
+          // eslint-disable-next-line
+          return restaurants.sort((a, b) => ((a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1));
+        },
+        byZA(restaurants) {
+          // eslint-disable-next-line
+          return restaurants.sort((a, b) => ((a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1)).reverse();
+        },
+        byStarUp(restaurants) {
+          return restaurants.sort((a, b) => ((a.rating > b.rating) ? 1 : -1));
+        },
+        byStarDown(restaurants) {
+          return restaurants.sort((a, b) => ((a.rating > b.rating) ? 1 : -1)).reverse();
+        },
+      },
+      orderType: 'none',
+      filters: {
+        all(restaurants) {
+          return restaurants.filter(() => true);
+        },
+        byStar(restaurants, star) {
+          return restaurants.filter((restaurant) => restaurant.rating > star);
+        },
+        byNumberRating(restaurants, number) {
+          return restaurants.filter((restaurant) => restaurant.rating > number);
+        },
+      },
+      filterType: ['all'],
+      filterValue: null,
     };
   },
+  computed: {
+    displayedRestaurants() {
+      let { restaurants } = this;
+      this.filterType.forEach((filter) => {
+        restaurants = this.filters[filter](restaurants);
+      });
+      return this.orders[this.orderType](restaurants);
+    },
+  },
   methods: {
+    changeOrderType(value) {
+      this.orderType = value;
+    },
     addRestaurant(value) {
-      this.results.push(value);
+      this.restaurants.push(value);
+    },
+    displayFilter() {
+      this.filterOption = !this.filterOption;
+    },
+    displaySort() {
+      this.sortOption = !this.sortOption;
     },
   },
   created() {
@@ -73,7 +138,7 @@ export default {
     service.nearbySearch(request, (results, status, pagination) => {
       /* eslint-disable-next-line */
       if (status === google.maps.places.PlacesServiceStatus.OK) {
-        this.results.push(...results);
+        this.restaurants.push(...results);
         pagination.nextPage();
       }
     });

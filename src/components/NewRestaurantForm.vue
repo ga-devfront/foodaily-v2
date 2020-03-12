@@ -56,7 +56,7 @@
 import VueGoogleAutocomplete from 'vue-google-autocomplete';
 
 export default {
-  name: 'Map',
+  name: 'NewRestaurantForm',
   props: {
     infos: {
       type: Object,
