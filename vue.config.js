@@ -21,6 +21,4 @@ module.exports = {
   devServer: {
     overlay: false,
   },
-
-  publicPath: '/openclassrooms/foodaily/'
 };
