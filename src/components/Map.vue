@@ -76,12 +76,13 @@ export default {
         count += 1;
         window.setTimeout(() => {
           /* eslint-disable-next-line */
-          new google.maps.Marker({
+          let marker = new google.maps.Marker({
             map: this.map,
             position: place.geometry.location,
             icon: MapIcon,
             title: place.name,
           });
+          marker.addListener('click', () => { this.$emit('restaurant', place); });
         }, 200 * count);
       });
     },

@@ -16,7 +16,9 @@
           <Map
           :restaurants="restaurants"
           :research="city" class="spaceRight"
-          v-on:newRestaurant="addRestaurant"/>
+          v-on:newRestaurant="addRestaurant"
+          v-on:restaurant="emitRestaurant"
+          />
           <section id="resultList" class="container column center">
             <a
               class="container bold white button littleSpaceBottom between z1"
@@ -39,6 +41,7 @@
               v-for="restaurant in displayedRestaurants"
               :restaurant="restaurant"
               :key="restaurant.name"
+              v-on:restaurant="emitRestaurant"
               />
             </transition-group>
           </section>
@@ -122,6 +125,9 @@ export default {
     },
   },
   methods: {
+    emitRestaurant(value) {
+      this.$emit('restaurant', value);
+    },
     changeOrderType(value) {
       this.orderType = value;
     },

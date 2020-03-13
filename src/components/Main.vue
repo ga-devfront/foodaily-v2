@@ -6,7 +6,9 @@
         :is="step"
         v-on:return="returnStep"
         v-on:search="setSearch"
+        v-on:restaurant="setRestaurant"
         :research="search"
+        :restaurant="currentRestaurant"
         />
       </transition>
     </main>
@@ -15,20 +17,24 @@
 <script>
 import Step0 from './step/Step0.vue';
 import Step1 from './step/Step1.vue';
+import Step2 from './step/Step2.vue';
 
 export default {
   name: 'myMain',
   components: {
     Step0,
     Step1,
+    Step2,
   },
   data() {
     return {
       steps: {
         0: Step0,
         1: Step1,
+        2: Step2,
       },
       currentStep: 0,
+      currentRestaurant: null,
       search: null,
     };
   },
@@ -41,6 +47,11 @@ export default {
     returnStep() {
       this.search = '';
       this.decrementStep();
+    },
+    setRestaurant(value) {
+      if (!value) { return; }
+      this.currentRestaurant = value;
+      this.incrementStep();
     },
     setSearch(value) {
       if (!value) { return; }

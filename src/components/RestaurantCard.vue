@@ -8,7 +8,7 @@
         <p>{{restaurant.vicinity}}</p>
         <div class="container around">
           <Rating :restaurant="restaurant"/>
-          <a class="button bold white">Détails ▶</a>
+          <a class="button bold white" v-on:click="$emit('restaurant', restaurant)">Détails ▶</a>
         </div>
       </article>
     </div>
