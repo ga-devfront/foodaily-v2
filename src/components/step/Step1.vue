@@ -10,7 +10,7 @@
           class="bold white button"
           v-on:click="$emit('return')"
           >← Retour</a>
-          <p id="resultNumber" class="bold">{{restaurants.length}} restaurants</p>
+          <p id="resultNumber" class="bold">{{displayedRestaurants.length}} restaurants</p>
         </aside>
         <section class="container around">
           <Map
@@ -24,7 +24,7 @@
               <a v-if="!filterOption">◀</a><a v-if="filterOption">▼</a>
             </a>
             <transition name="option" mode="out-in">
-            <FilterResult v-if="filterOption"/>
+            <FilterResult v-if="filterOption" v-on:filter="changeFilter"/>
             </transition>
             <a
               class="container bold white button littleSpaceBottom between z1"
@@ -101,18 +101,22 @@ export default {
           return restaurants.filter((restaurant) => restaurant.rating > star);
         },
         byNumberRating(restaurants, number) {
-          return restaurants.filter((restaurant) => restaurant.rating > number);
+          return restaurants.filter((restaurant) => restaurant.user_ratings_total > number);
         },
       },
-      filterType: ['all'],
-      filterValue: null,
+      filter: [
+        {
+          type: 'all',
+          value: 'null',
+        },
+      ],
     };
   },
   computed: {
     displayedRestaurants() {
       let { restaurants } = this;
-      this.filterType.forEach((filter) => {
-        restaurants = this.filters[filter](restaurants);
+      this.filter.forEach((filter) => {
+        restaurants = this.filters[filter.type](restaurants, filter.value);
       });
       return this.orders[this.orderType](restaurants);
     },
@@ -121,8 +125,8 @@ export default {
     changeOrderType(value) {
       this.orderType = value;
     },
-    changeFilterType(value) {
-      this.filterType = [value];
+    changeFilter(value) {
+      this.filter = value;
     },
     addRestaurant(value) {
       this.restaurants.push(value);
@@ -180,10 +184,10 @@ export default {
 }
 
 .option-enter-active, .option-leave-active {
-  transition: .5s ease-in-out;
+  transition: .3s ease;
 }
 .option-enter, .option-leave-to {
-  transform: translate(0px, -48px);
+  margin-top: -48px;
   opacity: 0;
 }
 
