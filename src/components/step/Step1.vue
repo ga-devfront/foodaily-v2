@@ -19,15 +19,21 @@
           v-on:newRestaurant="addRestaurant"/>
           <section id="resultList" class="container column center">
             <a
-              class="bold white button littleSpaceBottom dropdown"
-              v-on:click="displayFilter()">☵ Filtrer
+              class="container bold white button littleSpaceBottom between z1"
+              v-on:click="displayFilter()"><a>☵ Filtrer</a>
+              <a v-if="!filterOption">◀</a><a v-if="filterOption">▼</a>
             </a>
+            <transition name="option" mode="out-in">
             <FilterResult v-if="filterOption"/>
+            </transition>
             <a
-              class="bold white button littleSpaceBottom dropdown"
-              v-on:click="displaySort()">⇆ Trier
+              class="container bold white button littleSpaceBottom between z1"
+              v-on:click="displaySort()"><a>⇆ Trier</a>
+              <a v-if="!sortOption">◀</a><a v-if="sortOption">▼</a>
             </a>
+            <transition name="option" mode="out-in">
             <Sort v-if="sortOption" v-on:orderType="changeOrderType"/>
+            </transition>
             <transition-group name="fade2" mode="out-in">
               <RestaurantCard
               v-for="restaurant in displayedRestaurants"
@@ -115,6 +121,9 @@ export default {
     changeOrderType(value) {
       this.orderType = value;
     },
+    changeFilterType(value) {
+      this.filterType = [value];
+    },
     addRestaurant(value) {
       this.restaurants.push(value);
     },
@@ -166,8 +175,15 @@ export default {
 .fade2-enter-active, .fade2-leave-active {
   transition: opacity .5s ease;
 }
-.fade2-enter, .fade2-leave-to
-/* .component-fade-leave-active avant la 2.1.8 */ {
+.fade2-enter, .fade2-leave-to {
+  opacity: 0;
+}
+
+.option-enter-active, .option-leave-active {
+  transition: .5s ease-in-out;
+}
+.option-enter, .option-leave-to {
+  transform: translate(0px, -48px);
   opacity: 0;
 }
 
@@ -175,11 +191,8 @@ export default {
   position: relative;
 }
 
-.button.dropdown::after {
-  content: "▼";
-  color: #ffffff;
-  position: absolute;
-  top: auto;
-  right: 10px;
+.z1 {
+  position: relative;
+  z-index: 1;
 }
 </style>
