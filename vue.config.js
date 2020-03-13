@@ -10,12 +10,14 @@ module.exports = {
       },
     },
   },
+
   configureWebpack: {
     plugins: [
       new ErrorOverlayPlugin(),
     ],
     devtool: 'cheap-module-source-map',
   },
+
   devServer: {
     overlay: false,
   },
