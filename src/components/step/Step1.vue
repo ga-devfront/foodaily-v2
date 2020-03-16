@@ -5,8 +5,7 @@
       </aside>
       <article class="container center column width75">
         <aside class="container between spaceBottom">
-          <!-- eslint-disable-next-line -->
-          <a 
+          <a
           class="bold white button"
           v-on:click="$emit('return')"
           >← Retour</a>

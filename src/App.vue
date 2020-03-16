@@ -53,6 +53,10 @@ export default {
     align-items: center;
 }
 
+.container.verticalAround {
+    align-items: stretch;
+}
+
 .container.around {
     justify-content: space-around;
 }

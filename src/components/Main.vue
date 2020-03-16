@@ -7,6 +7,7 @@
         v-on:return="returnStep"
         v-on:search="setSearch"
         v-on:restaurant="setRestaurant"
+        v-on:returnResearch="returnResearch"
         :research="search"
         :restaurant="currentRestaurant"
         />
@@ -44,6 +45,10 @@ export default {
     },
   },
   methods: {
+    returnResearch() {
+      this.currentRestaurant = null;
+      this.decrementStep();
+    },
     returnStep() {
       this.search = '';
       this.decrementStep();

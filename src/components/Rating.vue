@@ -1,5 +1,5 @@
 <template>
-    <div class="container center verticalCenter">
+    <div class="container verticalCenter">
         <div class="star"><div class="rate" :ref="1" style="width: 0px"></div></div>
         <div class="star"><div class="rate" :ref="2"></div></div>
         <div class="star"><div class="rate" :ref="3"></div></div>
