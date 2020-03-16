@@ -15,7 +15,8 @@
               </aside>
               <section class="spaceLeft spaceRight">
                 <h1 class="big bold">{{restaurantInfo.name}}</h1>
-                <p><Rating :restaurant="restaurant"/></p>
+                <p class="bodrerRL"><Rating :restaurant="restaurant"/></p>
+                <p class="bodrerRL"><img v-for="(value, index) in restaurant.price_level" :key="value" src="../../assets/price.png" class="icon"></p>
                 <p class="container verticalCenter">
                   <img
                   src="../../assets/address.png"
