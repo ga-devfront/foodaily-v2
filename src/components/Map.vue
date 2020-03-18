@@ -61,12 +61,23 @@ export default {
       newRestaurantInfo: {
         geometry: { location: {} },
         vicinity: '',
+        id: this.newId,
       },
     };
   },
   watch: {
     results(val) {
       if (val.length) this.setMarker(val);
+    },
+  },
+  computed: {
+    newId() {
+      const letterAndNumber = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
+      let key = 'CUSTOM_';
+      for (let x = 0; x < 10; x += 1) {
+        key += letterAndNumber[Math.floor(Math.random() * Math.floor(letterAndNumber.length))];
+      }
+      return key;
     },
   },
   methods: {
