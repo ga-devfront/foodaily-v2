@@ -55,12 +55,13 @@ export default {
       displayNewRestaurantForm: false,
       city: this.research,
       map: null,
+      markers: [],
       newIcon: NewIcon,
       newMarker: null,
       newRestaurantInfo: {
         geometry: { location: {} },
         vicinity: '',
-        id: this.newId,
+        id: '',
       },
     };
   },
@@ -76,6 +77,7 @@ export default {
       for (let x = 0; x < 10; x += 1) {
         key += letterAndNumber[Math.floor(Math.random() * Math.floor(letterAndNumber.length))];
       }
+      console.log(key);
       return key;
     },
   },
@@ -92,7 +94,11 @@ export default {
             icon: MapIcon,
             title: place.name,
           });
-          marker.addListener('click', () => { this.$emit('restaurant', place); });
+          marker.addListener('click', () => {
+            this.$emit('restaurant', place);
+          });
+          marker.id = place.id;
+          this.markers.push(marker);
         }, 200 * count);
       });
     },
@@ -117,6 +123,7 @@ export default {
         draggable: true,
         title: 'déplacez moi !',
       });
+      this.newRestaurantInfo.id = this.newId;
       this.addNewRestaurant = true;
     },
     creatNewRestaurant() {
@@ -160,6 +167,11 @@ export default {
   },
   mounted() {
     this.setMap();
+  },
+  updated() {
+    console.log('updated');
+    const result = this.markers.filter((marker) => this.restaurants.some((restaurant) => marker.id === restaurant.id));
+    console.log(result);
   },
 };
 </script>

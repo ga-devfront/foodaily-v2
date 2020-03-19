@@ -77,6 +77,7 @@ export default {
         photos: [{ getUrl: null }],
         rating: null,
         user_ratings_total: null,
+        id: '',
       },
     };
   },
@@ -134,6 +135,7 @@ export default {
         img.readAsDataURL(files[0]);
         this.newRestaurantInfo.photos[0].getUrl = await imageResult;
       }
+      this.newRestaurantInfo.id = this.infos.id;
       const newRestaurantInfo = JSON.parse(JSON.stringify(this.newRestaurantInfo));
       this.error = false;
       this.resetNewRestaurant();
