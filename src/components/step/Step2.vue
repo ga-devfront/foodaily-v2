@@ -14,16 +14,23 @@
                 <img class="photo" :src="getImg" />
               </aside>
               <section class="spaceLeft spaceRight">
-                <h1 class="big bold">{{restaurantInfo.name}}</h1>
+                <h1 class="big bold">{{restaurant.name}}</h1>
                 <p class="bodrerRL"><Rating :restaurant="restaurant"/></p>
-                <p class="bodrerRL"><img v-for="(value, index) in restaurant.price_level" :key="value" src="../../assets/price.png" class="icon"></p>
+                <p class="bodrerRL">
+                  <img
+                  v-for="(value, index) in restaurant.price_level"
+                  :key="index"
+                  src="../../assets/price.png"
+                  class="icon"
+                  />
+                </p>
                 <p class="container verticalCenter">
                   <img
                   src="../../assets/address.png"
                   class="icon bodrerRL"
                   alt="Tel"
                   />
-                  {{restaurantInfo.vicinity}}
+                  {{restaurant.vicinity}}
                 </p>
                 <p class="container verticalCenter">
                   <img
@@ -31,7 +38,7 @@
                   class="icon bodrerRL"
                   alt="Tel"
                   />
-                  {{open}}
+                  {{getOpen}}
                 </p>
                 <p class="container verticalCenter">
                   <img
@@ -39,25 +46,33 @@
                   class="icon bodrerRL"
                   alt="Tel"
                   />
-                  {{phone}}
+                  {{getPhone}}
                 </p>
               </section>
             </article>
         </article>
+        <h2 class="blue">Avis</h2>
+        <div v-if="restaurant.reviews">
+        <Review v-for="(review, index) in restaurant.reviews" :review="review" :key="index" />
+        </div>
+        <div v-if="!restaurant.reviews">
+          <p>Aucun avis pour ce restaurant, soyez le premier à un poster un !</p>
+        </div>
     </section>
 </template>
 
 <script>
-import NoImg from '../../assets/noPicture.jpg';
 // eslint-disable-next-line
 import CustomMap from '../../../public/customMap.js';
 import MapIcon from '../../assets/icon.png';
 import Rating from '../Rating.vue';
+import Review from '../Review.vue';
 
 export default {
   name: 'Step2',
   components: {
     Rating,
+    Review,
   },
   props: {
     restaurant: {
@@ -69,35 +84,60 @@ export default {
     return {
       restaurantInfo: null,
       map: null,
-      open: 'Informations d\'ouvertures non disponible',
-      phone: 'Non renseigné',
     };
   },
   computed: {
+    getOpen() {
+      if (!this.restaurant.place_opening_hours) return 'Horaires d\'ouverture non renseigné';
+      if (this.restaurant.place_opening_hours.isOpen()) return 'Ouvert actuellement';
+      return 'Fermé actuellement';
+    },
     getPhone() {
-      if (!this.restaurantInfo.formatted_phone_number) return 'Non renseigné';
-      return this.restaurantInfo.formatted_phone_number;
+      if (!this.restaurant.formatted_phone_number) return 'Non renseigné';
+      return this.restaurant.formatted_phone_number;
     },
     getImg() {
-      if (!this.restaurant.photos) return NoImg;
-      if (typeof this.restaurant.photos[0].getUrl === 'function') {
-        return this.restaurant.photos[0].getUrl();
-      } if (typeof this.restaurant.photos[0].getUrl === 'string') {
-        return this.restaurant.photos[0].getUrl;
-      } return NoImg;
+      const { lat } = JSON.parse(JSON.stringify(this.restaurant.geometry.location));
+      const { lng } = JSON.parse(JSON.stringify(this.restaurant.geometry.location));
+      return `https://maps.googleapis.com/maps/api/streetview?size=500x300&location=${lat},${lng}&fov=80&heading=70&pitch=0&key=AIzaSyBda9d2634kdu2xbQBVaCirqsmkSCrfzwQ`;
     },
   },
   methods: {
-    setMarker(restaurant) {
-      window.setTimeout(() => {
-        /* eslint-disable-next-line */
-          let marker = new google.maps.Marker({
-          map: this.map,
-          position: restaurant.geometry.location,
-          icon: MapIcon,
-          title: restaurant.name,
+    async getDetails(restaurant) {
+      // eslint-disable-next-line
+      const service = new google.maps.places.PlacesService(document.createElement('div'));
+      const requestInfo = {
+        placeId: restaurant.place_id,
+        fields: ['formatted_phone_number', 'photos', 'reviews', 'opening_hours', 'utc_offset_minutes'],
+      };
+      return new Promise((resolve) => {
+        service.getDetails(requestInfo, (place, status) => {
+          // eslint-disable-next-line
+          if (status === google.maps.places.PlacesServiceStatus.OK) {
+            const details = {};
+            if (place.opening_hours) {
+              details.place_opening_hours = place.opening_hours;
+            }
+            if (place.formatted_phone_number) {
+              details.formatted_phone_number = place.formatted_phone_number;
+            }
+            if (place.reviews) {
+              details.reviews = place.reviews;
+            }
+            details.id = place.id;
+            this.$store.commit({ type: 'addRestaurant', dataType: 'details', details });
+          }
         });
-      }, 200);
+      });
+    },
+    setMarker(restaurant) {
+      // eslint-disable-next-line
+      new google.maps.Marker({
+        map: this.map,
+        position: restaurant.geometry.location,
+        icon: MapIcon,
+        title: restaurant.name,
+      });
     },
     async setMap() {
       const researchPos = this.restaurant.geometry.location;
@@ -110,31 +150,6 @@ export default {
       this.map = map;
       this.setMarker(this.restaurant);
     },
-    getInfo() {
-      // eslint-disable-next-line
-      const request = {
-        placeId: this.restaurant.place_id,
-        fields: ['formatted_phone_number', 'photos', 'reviews', 'opening_hours', 'utc_offset_minutes'],
-      };
-      /* eslint-disable-next-line */
-      const service = new google.maps.places.PlacesService(document.createElement('div'));
-      service.getDetails(request, (place, status) => {
-        // eslint-disable-next-line
-      if (status === google.maps.places.PlacesServiceStatus.OK) {
-          if (place.opening_hours) {
-            const isOpenNow = place.opening_hours.isOpen();
-            if (isOpenNow) { this.open = 'Ouvert actuellement'; }
-            this.open = 'Fermé actuellement';
-          }
-          if (place.formatted_phone_number) { this.phone = place.formatted_phone_number; }
-          Object.assign(this.restaurantInfo, place);
-        }
-      });
-    },
-  },
-  created() {
-    this.restaurantInfo = JSON.parse(JSON.stringify(this.restaurant));
-    this.getInfo();
   },
   mounted() {
     this.setMap();
@@ -156,7 +171,7 @@ export default {
 
 .photo {
   max-width: 100%;
-  min-width: 100%;
+  min-height: 100%;
 }
 
 .header {

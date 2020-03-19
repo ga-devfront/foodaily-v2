@@ -103,6 +103,10 @@ export default {
     color: #bc1f00;
 }
 
+.blue {
+    color: #0067c0;
+}
+
 .bold {
     font-weight: 700;
 }

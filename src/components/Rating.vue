@@ -5,7 +5,7 @@
         <div class="star"><div class="rate" :ref="3"></div></div>
         <div class="star"><div class="rate" :ref="4"></div></div>
         <div class="star"><div class="rate" :ref="5"></div></div>
-        ({{rateNumber}})
+        <a v-if="!reviewTest">({{rateNumber}})</a>
     </div>
 </template>
 
@@ -14,6 +14,10 @@
 export default {
   name: 'Rating',
   props: {
+    review: {
+      type: Boolean,
+      required: false,
+    },
     restaurant: {
       type: Object,
       required: true,
@@ -26,6 +30,10 @@ export default {
     };
   },
   computed: {
+    reviewTest() {
+      if (this.review === true) return true;
+      return false;
+    },
     rateNumber() {
       if (!this.numberOfRate) return '?';
       return this.numberOfRate;

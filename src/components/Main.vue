@@ -51,6 +51,7 @@ export default {
     },
     returnStep() {
       this.search = '';
+      this.$store.commit({ type: 'resetRestaurants', dataType: 'summary' });
       this.decrementStep();
     },
     setRestaurant(value) {

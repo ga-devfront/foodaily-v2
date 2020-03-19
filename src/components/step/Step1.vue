@@ -13,7 +13,7 @@
         </aside>
         <section class="container around">
           <Map
-          :restaurants="restaurants"
+          :restaurants="displayedRestaurants"
           :research="city" class="spaceRight"
           v-on:newRestaurant="addRestaurant"
           v-on:restaurant="emitRestaurant"
@@ -74,7 +74,6 @@ export default {
       filterOption: false,
       sortOption: false,
       city: this.research,
-      restaurants: [],
       orders: {
         none(restaurants) {
           return restaurants;
@@ -116,7 +115,7 @@ export default {
   },
   computed: {
     displayedRestaurants() {
-      let { restaurants } = this;
+      let restaurants = Object.values(this.$store.state.restaurants.summary);
       this.filter.forEach((filter) => {
         restaurants = this.filters[filter.type](restaurants, filter.value);
       });
@@ -134,7 +133,7 @@ export default {
       this.filter = value;
     },
     addRestaurant(value) {
-      this.restaurants.push(value);
+      this.$store.commit({ type: 'addRestaurant', dataType: 'summary', restaurant: value });
     },
     displayFilter() {
       this.filterOption = !this.filterOption;
@@ -152,11 +151,14 @@ export default {
       type: ['restaurant'],
     };
     /* eslint-disable-next-line */
-    const service = new google.maps.places.PlacesService(document.createElement('div'));
+      const service = new google.maps.places.PlacesService(document.createElement('div'));
     service.nearbySearch(request, (results, status, pagination) => {
+      console.log(status);
       /* eslint-disable-next-line */
       if (status === google.maps.places.PlacesServiceStatus.OK) {
-        this.restaurants.push(...results);
+        results.forEach((restaurant) => {
+          this.$store.commit({ type: 'addRestaurant', dataType: 'summary', restaurant });
+        });
         pagination.nextPage();
       }
     });
