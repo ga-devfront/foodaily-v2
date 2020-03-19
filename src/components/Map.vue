@@ -54,7 +54,6 @@ export default {
       addNewRestaurant: false,
       displayNewRestaurantForm: false,
       city: this.research,
-      results: this.restaurants,
       map: null,
       newIcon: NewIcon,
       newMarker: null,
@@ -66,7 +65,7 @@ export default {
     };
   },
   watch: {
-    results(val) {
+    restaurants(val) {
       if (val.length) this.setMarker(val);
     },
   },
@@ -106,7 +105,7 @@ export default {
         styles: CustomMap,
       });
       this.map = map;
-      if (this.results.length) this.setMarker(this.results);
+      if (this.restaurants.length) this.setMarker(this.restaurants);
     },
     creatNewMarker() {
       const researchPos = { lat: this.research.latitude, lng: this.research.longitude };
