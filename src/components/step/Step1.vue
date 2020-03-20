@@ -153,7 +153,6 @@ export default {
     /* eslint-disable-next-line */
       const service = new google.maps.places.PlacesService(document.createElement('div'));
     service.nearbySearch(request, (results, status, pagination) => {
-      console.log(status);
       /* eslint-disable-next-line */
       if (status === google.maps.places.PlacesServiceStatus.OK) {
         results.forEach((restaurant) => {
