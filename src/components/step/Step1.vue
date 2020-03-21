@@ -15,7 +15,6 @@
           <Map
           :restaurants="displayedRestaurants"
           :research="city" class="spaceRight"
-          v-on:newRestaurant="addRestaurant"
           v-on:restaurant="emitRestaurant"
           />
           <section id="resultList" class="container column center">
@@ -131,9 +130,6 @@ export default {
     },
     changeFilter(value) {
       this.filter = value;
-    },
-    addRestaurant(value) {
-      this.$store.commit({ type: 'addRestaurant', dataType: 'summary', restaurant: value });
     },
     displayFilter() {
       this.filterOption = !this.filterOption;
