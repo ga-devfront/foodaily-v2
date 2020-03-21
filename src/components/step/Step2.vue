@@ -153,9 +153,9 @@ export default {
           fields: ['formatted_phone_number', 'photos', 'reviews', 'opening_hours', 'utc_offset_minutes'],
         };
         service.getDetails(requestInfo, (place, status) => {
-        // eslint-disable-next-line
+          const restaurantDetails = {};
+          // eslint-disable-next-line
           if (status === google.maps.places.PlacesServiceStatus.OK) {
-            const restaurantDetails = {};
             if (place.opening_hours) {
               restaurantDetails.place_opening_hours = place.opening_hours;
             }
@@ -165,6 +165,13 @@ export default {
             if (place.reviews) {
               restaurantDetails.reviews = place.reviews;
             }
+            restaurantDetails.id = this.restaurant.id;
+            this.details = restaurantDetails;
+            this.$store.commit({ type: 'addRestaurant', dataType: 'details', restaurant: restaurantDetails });
+          } else {
+            restaurantDetails.place_opening_hours = null;
+            restaurantDetails.formatted_phone_number = null;
+            restaurantDetails.reviews = [];
             restaurantDetails.id = this.restaurant.id;
             this.details = restaurantDetails;
             this.$store.commit({ type: 'addRestaurant', dataType: 'details', restaurant: restaurantDetails });
