@@ -66,6 +66,13 @@ export default {
   },
   watch: {
     restaurants(val) {
+      this.markers.forEach((marker) => {
+        if (!val.some((restaurant) => restaurant.id === marker.id)) {
+          marker.setMap(null);
+        } else {
+          marker.setMap(this.map);
+        }
+      });
       if (val.length) this.setMarker(val);
     },
   },
@@ -75,18 +82,20 @@ export default {
       restaurants.forEach((place) => {
         count += 1;
         window.setTimeout(() => {
+          if (!this.markers.some((marker) => place.id === marker.id)) {
           /* eslint-disable-next-line */
-          let marker = new google.maps.Marker({
-            map: this.map,
-            position: place.geometry.location,
-            icon: MapIcon,
-            title: place.name,
-          });
-          marker.addListener('click', () => {
-            this.$emit('restaurant', place);
-          });
-          marker.id = place.id;
-          this.markers.push(marker);
+          let newMarker = new google.maps.Marker({
+              map: this.map,
+              position: place.geometry.location,
+              icon: MapIcon,
+              title: place.name,
+            });
+            newMarker.addListener('click', () => {
+              this.$emit('restaurant', place);
+            });
+            newMarker.id = place.id;
+            this.markers.push(newMarker);
+          }
         }, 200 * count);
       });
     },
@@ -152,10 +161,6 @@ export default {
   },
   mounted() {
     this.setMap();
-  },
-  updated() {
-    // eslint-disable-next-line
-    const result = this.markers.filter((marker) => this.restaurants.some((restaurant) => marker.id === restaurant.id)); 
   },
 };
 </script>
