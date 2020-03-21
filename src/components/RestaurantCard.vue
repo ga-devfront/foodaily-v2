@@ -7,7 +7,7 @@
         <h3>{{restaurant.name}}</h3>
         <p>{{restaurant.vicinity}}</p>
         <div class="container around">
-          <Rating :restaurant="restaurant"/>
+          <Rating :rate="restaurant.rating" :rateCount="restaurant.user_ratings_total"/>
           <a class="button bold white" v-on:click="$emit('restaurant', restaurant)">Détails ▶</a>
         </div>
       </article>

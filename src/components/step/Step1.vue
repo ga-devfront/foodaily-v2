@@ -143,7 +143,7 @@ export default {
     const pos = new google.maps.LatLng(this.city.latitude,this.city.longitude);
     const request = {
       location: pos,
-      radius: '500',
+      radius: '800',
       type: ['restaurant'],
     };
     /* eslint-disable-next-line */

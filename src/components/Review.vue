@@ -2,7 +2,7 @@
     <div class="container column review">
         <div class="container verticalCenter bodrerRL">
             <p class="bold bodrerRL">{{review.author_name}}</p>
-            <p class="bodrerRL"><Rating :restaurant="review" :review="true" /></p>
+            <p class="bodrerRL"><Rating :rate="review.rating" :review="true" /></p>
         </div>
         <p class="bodrerRL">{{review.text}}</p>
     </div>

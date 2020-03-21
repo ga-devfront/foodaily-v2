@@ -15,7 +15,7 @@
               </aside>
               <section class="spaceLeft spaceRight">
                 <h1 class="big bold">{{restaurant.name}}</h1>
-                <p class="bodrerRL"><Rating :restaurant="restaurant"/></p>
+                <p class="bodrerRL"><Rating :rate="restaurantRate" :rateCount="restaurantRateCount"/></p>
                 <p class="bodrerRL">
                   <img
                   v-for="(value, index) in restaurant.price_level"
@@ -51,17 +51,17 @@
               </section>
             </article>
         </article>
-        <h2 class="blue">Avis</h2>
-        <div v-if="details.reviews">
-        <Review v-for="(review, index) in details.reviews" :review="review" :key="index" />
+        <h2 class="blue">Derniers avis</h2>
+        <div v-if="restaurantDetails.reviews">
+        <Review v-for="(review, index) in restaurantDetails.reviews" :review="review" :key="index" />
         </div>
-        <div v-if="!details.reviews">
-          <p>Aucun avis pour ce restaurant, soyez le premier à un poster un !</p>
+        <div v-if="!restaurantDetails.reviews">
+          <p>Aucun avis pour ce restaurant, soyez le premier à en poster un !</p>
         </div>
         <form class="container column newReview">
         <div class="container verticalCenter bodrerRL">
-            <label class="bold bodrerRL" for="pseudo">Pseudo :</label>
-            <input class="input" type="text" name="pseudo" required>
+            <label class="bold bodrerRL" for="username">Pseudo :</label>
+            <input class="input" type="text" name="username" id="username" required>
             <label class="bold bodrerRL">Note :</label>
             <div v-for="ref in [0, 1, 2, 3, 4]" class="star"
             @mouseover="mouseInRate(ref)"
@@ -70,15 +70,15 @@
             :key="ref"
           >
             <div
-              :style="{ width: (ref + 1 <= newComment.rate) ? '20px' : '0px' }"
+              :style="{ width: (ref + 1 <= newReview.rating) ? '20px' : '0px' }"
               class="rate"
               :ref="ref"
             >
             </div>
           </div>
         </div><label class="bold bodrerRL" for="review">Commentaire:</label>
-        <textarea class="bodrerRL" name="review" cols="40" rows="5"></textarea>
-        <a class="button bold white">Envoyer</a>
+        <textarea class="bodrerRL" name="review" cols="40" rows="5" id="review"></textarea>
+        <a class="button bold white" @click="emitReview()">Envoyer</a>
     </form>
     </section>
 </template>
@@ -104,48 +104,62 @@ export default {
   },
   data() {
     return {
-      newComment: {
-        username: '',
-        rate: 0,
-        review: '',
+      newReview: {
+        author_name: '',
+        rating: 0,
+        text: '',
       },
       details: {},
       map: null,
     };
   },
   computed: {
+    restaurantRate() {
+      return this.$store.getters.restaurant({
+        dataType: 'summary',
+        id: this.restaurant.id,
+      }).rating;
+    },
+    restaurantRateCount() {
+      const rateCount = this.$store.getters.restaurant({
+        dataType: 'summary',
+        id: this.restaurant.id,
+      }).user_ratings_total;
+      return (rateCount) ? rateCount : '0';
+    },
     getOpen() {
-      if (!this.details.place_opening_hours) return 'Horaires d\'ouverture non renseigné';
-      if (this.details.place_opening_hours.isOpen()) return 'Ouvert actuellement';
+      if (!this.restaurantDetails) return 'Chargement en cours ...';
+      if (!this.restaurantDetails.place_opening_hours) return 'Horaires d\'ouverture non renseigné';
+      if (this.restaurantDetails.place_opening_hours.isOpen()) return 'Ouvert actuellement';
       return 'Fermé actuellement';
     },
     getPhone() {
-      if (!this.details.formatted_phone_number) return 'Non renseigné';
-      return this.details.formatted_phone_number;
+      if (!this.restaurantDetails) return 'Chargement en cours ...';
+      if (!this.restaurantDetails.formatted_phone_number) return 'Non renseigné';
+      return this.restaurantDetails.formatted_phone_number;
     },
     getImg() {
       const { lat } = JSON.parse(JSON.stringify(this.restaurant.geometry.location));
       const { lng } = JSON.parse(JSON.stringify(this.restaurant.geometry.location));
       return `https://maps.googleapis.com/maps/api/streetview?size=500x300&location=${lat},${lng}&fov=80&heading=70&pitch=0&key=AIzaSyBda9d2634kdu2xbQBVaCirqsmkSCrfzwQ`;
     },
+    restaurantDetails() {
+      const { restaurant } = this;
+      return this.$store.getters.restaurant({
+        dataType: 'details',
+        id: restaurant.id,
+      });
+    },
   },
   methods: {
-    setRate(value) {
-      this.newComment.rate = value + 1;
-    },
-    mouseInRate(value) {
-      for (let x = 0; x < value + 1; x += 1) {
-        this.$refs[x][0].style.width = '20px';
-      }
-    },
-    mouseOutRate(value) {
-      for (let x = 0; x < value + 1; x += 1) {
-        if (x + 1 > this.newComment.rate) this.$refs[x][0].style.width = '0px';
-      }
-    },
-    getDetails(restaurant) {
+    async checkDetailsCache() {
+      const { restaurant } = this;
       // eslint-disable-next-line
-      if (this.$store.state.restaurants.details.findIndex((i) => i.id === this.restaurant.id) === -1) {
+      return new Promise((resolve) => {
+        if (this.$store.getters.restaurantIndex({
+          dataType: 'details',
+          id: restaurant.id,
+        }) !== -1) return resolve();
         // eslint-disable-next-line
         const service = new google.maps.places.PlacesService(document.createElement('div'));
         const requestInfo = {
@@ -168,26 +182,37 @@ export default {
             restaurantDetails.id = this.restaurant.id;
             this.details = restaurantDetails;
             this.$store.commit({ type: 'addRestaurant', dataType: 'details', restaurant: restaurantDetails });
-          } else {
-            restaurantDetails.place_opening_hours = null;
-            restaurantDetails.formatted_phone_number = null;
-            restaurantDetails.reviews = [];
-            restaurantDetails.id = this.restaurant.id;
-            this.details = restaurantDetails;
-            this.$store.commit({ type: 'addRestaurant', dataType: 'details', restaurant: restaurantDetails });
+            return resolve();
           }
+          restaurantDetails.place_opening_hours = null;
+          restaurantDetails.formatted_phone_number = null;
+          restaurantDetails.reviews = [];
+          restaurantDetails.id = this.restaurant.id;
+          this.$store.commit({ type: 'addRestaurant', dataType: 'details', restaurant: restaurantDetails });
+          return resolve();
         });
-      } else {
-        this.details = this.$store.state.restaurants.details[this.$store.state.restaurants.details.findIndex((i) => i.id === this.restaurant.id)];
+      });
+    },
+    setRate(value) {
+      this.newReview.rating = value + 1;
+    },
+    mouseInRate(value) {
+      for (let x = 0; x < value + 1; x += 1) {
+        this.$refs[x][0].style.width = '20px';
       }
     },
-    setMarker(restaurant) {
+    mouseOutRate(value) {
+      for (let x = 0; x < value + 1; x += 1) {
+        if (x + 1 > this.newReview.rating) this.$refs[x][0].style.width = '0px';
+      }
+    },
+    setMarker() {
       // eslint-disable-next-line
       new google.maps.Marker({
         map: this.map,
-        position: restaurant.geometry.location,
+        position: this.restaurant.geometry.location,
         icon: MapIcon,
-        title: restaurant.name,
+        title: this.restaurant.name,
       });
     },
     async setMap() {
@@ -201,11 +226,20 @@ export default {
       this.map = map;
       this.setMarker(this.restaurant);
     },
+    emitReview() {
+      this.newReview.author_name = document.getElementById('username').value;
+      this.newReview.text = document.getElementById('review').value;
+      const newReview = JSON.parse(JSON.stringify(this.newReview));
+      this.$store.commit({ type: 'addReview', restaurant: this.restaurant, review: newReview });
+      this.newReview.author_name = '';
+      this.newReview.text = '';
+      this.newReview.rating = 0;
+      document.getElementById('username').value = null;
+      document.getElementById('review').value = null;
+    },
   },
-  created() {
-    this.getDetails(this.restaurant);
-  },
-  mounted() {
+  async mounted() {
+    await this.checkDetailsCache();
     this.setMap();
   },
 };
