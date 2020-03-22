@@ -15,8 +15,9 @@
               </aside>
               <section class="spaceLeft spaceRight">
                 <h1 class="big bold">{{restaurant.name}}</h1>
-                <p class="bodrerRL"><Rating :rate="restaurantRate" :rateCount="restaurantRateCount"/></p>
-                <p class="bodrerRL">
+                <!-- eslint-disable-next-line max-len -->
+                <p class="spaceRL"><Rating :rate="restaurantRate" :rateCount="restaurantRateCount"/></p>
+                <p class="spaceRL">
                   <img
                   v-for="(value, index) in restaurant.price_level"
                   :key="index"
@@ -27,7 +28,7 @@
                 <p class="container verticalCenter">
                   <img
                   src="../../assets/address.png"
-                  class="icon bodrerRL"
+                  class="icon spaceRL"
                   alt="Tel"
                   />
                   {{restaurant.vicinity}}
@@ -35,7 +36,7 @@
                 <p class="container verticalCenter">
                   <img
                   src="../../assets/open.png"
-                  class="icon bodrerRL"
+                  class="icon spaceRL"
                   alt="Tel"
                   />
                   {{getOpen}}
@@ -43,7 +44,7 @@
                 <p class="container verticalCenter">
                   <img
                   src="../../assets/phone.png"
-                  class="icon bodrerRL"
+                  class="icon spaceRL"
                   alt="Tel"
                   />
                   {{getPhone}}
@@ -53,16 +54,17 @@
         </article>
         <h2 class="blue">Derniers avis</h2>
         <div v-if="restaurantDetails.reviews">
+        <!-- eslint-disable-next-line max-len -->
         <Review v-for="(review, index) in restaurantDetails.reviews" :review="review" :key="index" />
         </div>
         <div v-if="!restaurantDetails.reviews">
           <p>Aucun avis pour ce restaurant, soyez le premier à en poster un !</p>
         </div>
         <form class="container column newReview">
-        <div class="container verticalCenter bodrerRL">
-            <label class="bold bodrerRL" for="username">Pseudo :</label>
+        <div class="container verticalCenter spaceRight spaceLeft littleSpaceTop">
+            <label class="bold spaceRL" for="username">Pseudo :</label>
             <input class="input" type="text" name="username" id="username" required>
-            <label class="bold bodrerRL">Note :</label>
+            <label class="bold spaceLeft">Note :</label>
             <div v-for="ref in [0, 1, 2, 3, 4]" class="star"
             @mouseover="mouseInRate(ref)"
             @mouseout="mouseOutRate(ref)"
@@ -76,9 +78,11 @@
             >
             </div>
           </div>
-        </div><label class="bold bodrerRL" for="review">Commentaire:</label>
-        <textarea class="bodrerRL" name="review" cols="40" rows="5" id="review"></textarea>
-        <a class="button bold white" @click="emitReview()">Envoyer</a>
+        </div><label class="bold spaceRight spaceLeft" for="review">Commentaire:</label>
+        <!-- eslint-disable max-len-->
+        <textarea class="spaceRight spaceLeft littleSpaceBottom" name="review" cols="40" rows="5" id="review"></textarea>
+        <a class="reviewButton center container verticalCenter bold white" @click="emitReview()">Envoyer</a>
+        <!-- eslint-enable max-len-->
     </form>
     </section>
 </template>
@@ -125,6 +129,7 @@ export default {
         dataType: 'summary',
         id: this.restaurant.id,
       }).user_ratings_total;
+      // eslint-disable-next-line no-unneeded-ternary
       return (rateCount) ? rateCount : '0';
     },
     getOpen() {
@@ -217,7 +222,7 @@ export default {
     },
     async setMap() {
       const researchPos = this.restaurant.geometry.location;
-      /* eslint-disable-next-line */
+      // eslint-disable-next-line
       const map = await new google.maps.Map(document.getElementById('map'), {
         center: researchPos,
         zoom: 16,
@@ -303,5 +308,19 @@ export default {
 .photoBox {
   height: 100px;
   width: 100px;
+}
+
+.reviewButton {
+  border: none;
+  width: 100%;
+  height: 40px;
+  background: #0063bf;
+  -webkit-transition: 0.5s ease;
+  transition: 0.5s ease;
+}
+
+.reviewButton:hover {
+    background-color: #007eea;
+    cursor: pointer;
 }
 </style>
