@@ -12,6 +12,7 @@
                 classname="form-control"
                 placeholder="Ville de recherche"
                 types="(cities)"
+                :enable-geolocation="true"
                 v-on:placechanged="getAddressData"
                 :country="['fr', 'ch']"
                 no-results-found>
@@ -51,7 +52,7 @@ export default {
     },
   },
   mounted() {
-    this.$refs.address.focus();
+    this.$refs.address.geolocate();
   },
 };
 </script>
