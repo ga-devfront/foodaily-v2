@@ -5,8 +5,7 @@
       </aside>
       <article class="container center column width75">
         <aside class="container between spaceBottom">
-          <!-- eslint-disable-next-line -->
-          <a 
+          <a
           class="bold white button"
           v-on:click="$emit('return')"
           >← Retour</a>
@@ -14,9 +13,10 @@
         </aside>
         <section class="container around">
           <Map
-          :restaurants="restaurants"
+          :restaurants="displayedRestaurants"
           :research="city" class="spaceRight"
-          v-on:newRestaurant="addRestaurant"/>
+          v-on:restaurant="emitRestaurant"
+          />
           <section id="resultList" class="container column center">
             <a
               class="container bold white button littleSpaceBottom between z1"
@@ -39,6 +39,7 @@
               v-for="restaurant in displayedRestaurants"
               :restaurant="restaurant"
               :key="restaurant.name"
+              v-on:restaurant="emitRestaurant"
               />
             </transition-group>
           </section>
@@ -72,17 +73,16 @@ export default {
       filterOption: false,
       sortOption: false,
       city: this.research,
-      restaurants: [],
       orders: {
         none(restaurants) {
           return restaurants;
         },
         byAZ(restaurants) {
-          // eslint-disable-next-line
+          // eslint-disable-next-line max-len
           return restaurants.sort((a, b) => ((a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1));
         },
         byZA(restaurants) {
-          // eslint-disable-next-line
+          // eslint-disable-next-line max-len
           return restaurants.sort((a, b) => ((a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1)).reverse();
         },
         byStarUp(restaurants) {
@@ -114,7 +114,7 @@ export default {
   },
   computed: {
     displayedRestaurants() {
-      let { restaurants } = this;
+      let restaurants = Object.values(this.$store.state.restaurants.summary);
       this.filter.forEach((filter) => {
         restaurants = this.filters[filter.type](restaurants, filter.value);
       });
@@ -122,14 +122,14 @@ export default {
     },
   },
   methods: {
+    emitRestaurant(value) {
+      this.$emit('restaurant', value);
+    },
     changeOrderType(value) {
       this.orderType = value;
     },
     changeFilter(value) {
       this.filter = value;
-    },
-    addRestaurant(value) {
-      this.restaurants.push(value);
     },
     displayFilter() {
       this.filterOption = !this.filterOption;
@@ -143,15 +143,17 @@ export default {
     const pos = new google.maps.LatLng(this.city.latitude,this.city.longitude);
     const request = {
       location: pos,
-      radius: '500',
+      radius: '800',
       type: ['restaurant'],
     };
     /* eslint-disable-next-line */
-    const service = new google.maps.places.PlacesService(document.createElement('div'));
+      const service = new google.maps.places.PlacesService(document.createElement('div'));
     service.nearbySearch(request, (results, status, pagination) => {
       /* eslint-disable-next-line */
       if (status === google.maps.places.PlacesServiceStatus.OK) {
-        this.restaurants.push(...results);
+        results.forEach((restaurant) => {
+          this.$store.commit({ type: 'addRestaurant', dataType: 'summary', restaurant });
+        });
         pagination.nextPage();
       }
     });

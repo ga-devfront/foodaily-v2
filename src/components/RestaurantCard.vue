@@ -7,8 +7,8 @@
         <h3>{{restaurant.name}}</h3>
         <p>{{restaurant.vicinity}}</p>
         <div class="container around">
-          <Rating :restaurant="restaurant"/>
-          <a class="button bold white">Détails ▶</a>
+          <Rating :rate="restaurant.rating" :rateCount="restaurantRateCount"/>
+          <a class="button bold white" v-on:click="$emit('restaurant', restaurant)">Détails ▶</a>
         </div>
       </article>
     </div>
@@ -30,6 +30,14 @@ export default {
     },
   },
   computed: {
+    restaurantRateCount() {
+      const rateCount = this.$store.getters.restaurant({
+        dataType: 'summary',
+        id: this.restaurant.id,
+      }).user_ratings_total;
+      // eslint-disable-next-line no-unneeded-ternary
+      return (rateCount) ? rateCount : '0';
+    },
     getImg() {
       if (!this.restaurant.photos) return NoImg;
       if (typeof this.restaurant.photos[0].getUrl === 'function') {

@@ -4,14 +4,14 @@
       class="overlay top white container center verticalCenter"
       v-if="addNewRestaurant">
       Déplacer l'icone
-      <img :src="newIcon" class="bodrerRL"/>
+      <img :src="newIcon" class="spaceRL"/>
       à l'emplacement du restaurant à ajouter puis validez</aside>
 
       <NewRestaurantForm
       v-if="displayNewRestaurantForm"
       :infos="newRestaurantInfo"
       v-on:abort="abort"
-      v-on:newRestaurant="emitNewRestaurant"/>
+      />
 
       <div id="map"></div>
       <button
@@ -54,8 +54,8 @@ export default {
       addNewRestaurant: false,
       displayNewRestaurantForm: false,
       city: this.research,
-      results: this.restaurants,
       map: null,
+      markers: [],
       newIcon: NewIcon,
       newMarker: null,
       newRestaurantInfo: {
@@ -65,7 +65,14 @@ export default {
     };
   },
   watch: {
-    results(val) {
+    restaurants(val) {
+      this.markers.forEach((marker) => {
+        if (!val.some((restaurant) => restaurant.id === marker.id)) {
+          marker.setMap(null);
+        } else {
+          marker.setMap(this.map);
+        }
+      });
       if (val.length) this.setMarker(val);
     },
   },
@@ -75,13 +82,20 @@ export default {
       restaurants.forEach((place) => {
         count += 1;
         window.setTimeout(() => {
+          if (!this.markers.some((marker) => place.id === marker.id)) {
           /* eslint-disable-next-line */
-          new google.maps.Marker({
-            map: this.map,
-            position: place.geometry.location,
-            icon: MapIcon,
-            title: place.name,
-          });
+          let newMarker = new google.maps.Marker({
+              map: this.map,
+              position: place.geometry.location,
+              icon: MapIcon,
+              title: place.name,
+            });
+            newMarker.addListener('click', () => {
+              this.$emit('restaurant', place);
+            });
+            newMarker.id = place.id;
+            this.markers.push(newMarker);
+          }
         }, 200 * count);
       });
     },
@@ -94,7 +108,7 @@ export default {
         styles: CustomMap,
       });
       this.map = map;
-      if (this.results.length) this.setMarker(this.results);
+      if (this.restaurants.length) this.setMarker(this.restaurants);
     },
     creatNewMarker() {
       const researchPos = { lat: this.research.latitude, lng: this.research.longitude };
@@ -141,10 +155,8 @@ export default {
     },
     abort() {
       this.displayNewRestaurantForm = false;
-    },
-    emitNewRestaurant(value) {
-      this.$emit('newRestaurant', value);
-      this.displayNewRestaurantForm = false;
+      this.newRestaurantInfo.geometry.location = {};
+      this.newRestaurantInfo.vicinity = '';
     },
   },
   mounted() {

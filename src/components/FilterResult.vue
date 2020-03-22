@@ -1,7 +1,7 @@
 <template>
     <div class="container around littleSpaceBottom verticalCenter">
       <a class="bold container">Note :
-        <div class="container center verticalCenter bodrerRL">
+        <div class="container center verticalCenter spaceRL">
           <div v-for="ref in [0, 1, 2, 3, 4]" class="star"
             @mouseover="mouseInRate(ref)"
             @mouseout="mouseOutRate(ref)"

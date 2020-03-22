@@ -12,6 +12,7 @@
                 classname="form-control"
                 placeholder="Ville de recherche"
                 types="(cities)"
+                :enable-geolocation="true"
                 v-on:placechanged="getAddressData"
                 :country="['fr', 'ch']"
                 no-results-found>
@@ -28,7 +29,7 @@
 
 <script>
 import VueGoogleAutocomplete from 'vue-google-autocomplete';
-/* eslint-disable no-new */
+
 export default {
   name: 'searchBar',
   data() {
@@ -51,7 +52,7 @@ export default {
     },
   },
   mounted() {
-    this.$refs.address.focus();
+    this.$refs.address.geolocate();
   },
 };
 </script>

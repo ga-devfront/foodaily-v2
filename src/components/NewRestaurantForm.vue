@@ -77,8 +77,20 @@ export default {
         photos: [{ getUrl: null }],
         rating: null,
         user_ratings_total: null,
+        id: '',
+        place_id: '',
       },
     };
+  },
+  computed: {
+    newId() {
+      const letterAndNumber = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
+      let key = 'CUSTOM_';
+      for (let x = 0; x < 20; x += 1) {
+        key += letterAndNumber[Math.floor(Math.random() * Math.floor(letterAndNumber.length))];
+      }
+      return key;
+    },
   },
   methods: {
     setAddressData(addressData) {
@@ -134,21 +146,24 @@ export default {
         img.readAsDataURL(files[0]);
         this.newRestaurantInfo.photos[0].getUrl = await imageResult;
       }
+      this.newRestaurantInfo.id = this.newId;
+      this.newRestaurantInfo.place_id = this.newRestaurantInfo.id;
       const newRestaurantInfo = JSON.parse(JSON.stringify(this.newRestaurantInfo));
-      this.error = false;
-      this.resetNewRestaurant();
-      this.$emit('newRestaurant', newRestaurantInfo);
+      this.$store.commit({ type: 'addRestaurant', dataType: 'summary', restaurant: newRestaurantInfo });
+      this.abort();
     },
     abort() {
       this.error = false;
-      this.$emit('abort', true);
       this.resetNewRestaurant();
+      this.$emit('abort', true);
     },
     resetNewRestaurant() {
       this.newRestaurantInfo.name = null;
       this.newRestaurantInfo.geometry.location = {};
       this.newRestaurantInfo.vicinity = null;
       this.newRestaurantInfo.photos[0].getUrl = null;
+      this.newRestaurantInfo.id = '';
+      this.newRestaurantInfo.place_id = '';
     },
   },
 };

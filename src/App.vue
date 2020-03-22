@@ -53,6 +53,10 @@ export default {
     align-items: center;
 }
 
+.container.verticalAround {
+    align-items: stretch;
+}
+
 .container.around {
     justify-content: space-around;
 }
@@ -73,6 +77,10 @@ export default {
 
 .littleSpaceBottom {
     margin-bottom: 10px;
+}
+
+.littleSpaceTop {
+    margin-top: 10px;
 }
 
 .spaceTop {
@@ -97,6 +105,10 @@ export default {
 
 .red {
     color: #bc1f00;
+}
+
+.blue {
+    color: #0067c0;
 }
 
 .bold {
@@ -143,7 +155,7 @@ export default {
   height: 580px;
 }
 
-.bodrerRL {
+.spaceRL {
   margin-left: 5px;
   margin-right: 5px;
 }

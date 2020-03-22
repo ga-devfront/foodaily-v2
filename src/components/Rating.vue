@@ -1,11 +1,9 @@
 <template>
-    <div class="container center verticalCenter">
-        <div class="star"><div class="rate" :ref="1" style="width: 0px"></div></div>
-        <div class="star"><div class="rate" :ref="2"></div></div>
-        <div class="star"><div class="rate" :ref="3"></div></div>
-        <div class="star"><div class="rate" :ref="4"></div></div>
-        <div class="star"><div class="rate" :ref="5"></div></div>
-        ({{rateNumber}})
+    <div class="container verticalCenter">
+        <div class="star" v-for="star in [1, 2, 3, 4, 5]" :key="star">
+          <div class="rate" :ref="star" :style="getRatePercentage(star)"></div>
+        </div>
+        <a v-if="rateCount">({{rateCount}})</a>
     </div>
 </template>
 
@@ -14,42 +12,28 @@
 export default {
   name: 'Rating',
   props: {
-    restaurant: {
-      type: Object,
+    rate: {
+      type: Number,
       required: true,
     },
-  },
-  data() {
-    return {
-      rate: this.restaurant.rating,
-      numberOfRate: this.restaurant.user_ratings_total,
-    };
-  },
-  computed: {
-    rateNumber() {
-      if (!this.numberOfRate) return '?';
-      return this.numberOfRate;
+    rateCount: {
+      type: Number,
+      required: false,
     },
   },
   methods: {
-    setRating(ref) {
-      if (!this.rate) return;
+    getRatePercentage(ref) {
+      if (!this.rate) return 'width: 0px';
       const rateIn100 = this.rate * 20;
       const star = rateIn100 - (20 * ref);
       if (star > -19) {
-        if (star >= 0) {
-          this.$refs[ref].style = 'width: 20px';
-        } else {
-          const calc = star + 20;
-          this.$refs[ref].style = `width: ${calc}px`;
-        }
+        if (star >= 0) return 'width: 20px';
+
+        const calc = star + 20;
+        return `width: ${calc}px`;
       }
+      return 'width: 0px';
     },
-  },
-  mounted() {
-    for (let y = 1; y < 6; y += 1) {
-      this.setRating(y);
-    }
   },
 };
 </script>
