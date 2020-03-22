@@ -29,7 +29,7 @@
 
 <script>
 import VueGoogleAutocomplete from 'vue-google-autocomplete';
-/* eslint-disable no-new */
+
 export default {
   name: 'searchBar',
   data() {

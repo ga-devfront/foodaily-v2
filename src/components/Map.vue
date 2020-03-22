@@ -4,7 +4,7 @@
       class="overlay top white container center verticalCenter"
       v-if="addNewRestaurant">
       Déplacer l'icone
-      <img :src="newIcon" class="bodrerRL"/>
+      <img :src="newIcon" class="spaceRL"/>
       à l'emplacement du restaurant à ajouter puis validez</aside>
 
       <NewRestaurantForm

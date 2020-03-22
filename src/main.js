@@ -31,6 +31,7 @@ const store = new Vuex.Store({
       const detailsIndex = store.getters.restaurantIndex({ dataType: 'details', id: settings.restaurant.id });
       state.restaurants.details[detailsIndex].reviews.push(settings.review);
       /* eslint-disable no-param-reassign */
+      // eslint-disable-next-line max-len
       state.restaurants.summary[summaryIndex].rating = (state.restaurants.summary[summaryIndex].user_ratings_total * state.restaurants.summary[summaryIndex].rating + settings.review.rating) / (state.restaurants.summary[summaryIndex].user_ratings_total + 1);
       state.restaurants.summary[summaryIndex].user_ratings_total += 1;
       /* eslint-enable no-param-reassign */

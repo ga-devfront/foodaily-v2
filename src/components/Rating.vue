@@ -12,10 +12,6 @@
 export default {
   name: 'Rating',
   props: {
-    review: {
-      type: Boolean,
-      required: false,
-    },
     rate: {
       type: Number,
       required: true,
@@ -24,8 +20,6 @@ export default {
       type: Number,
       required: false,
     },
-  },
-  computed: {
   },
   methods: {
     getRatePercentage(ref) {

@@ -78,11 +78,11 @@ export default {
           return restaurants;
         },
         byAZ(restaurants) {
-          // eslint-disable-next-line
+          // eslint-disable-next-line max-len
           return restaurants.sort((a, b) => ((a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1));
         },
         byZA(restaurants) {
-          // eslint-disable-next-line
+          // eslint-disable-next-line max-len
           return restaurants.sort((a, b) => ((a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1)).reverse();
         },
         byStarUp(restaurants) {

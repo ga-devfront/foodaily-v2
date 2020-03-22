@@ -1,10 +1,10 @@
 <template>
     <div class="container column review">
-        <div class="container verticalCenter bodrerRL">
-            <p class="bold bodrerRL">{{review.author_name}}</p>
-            <p class="bodrerRL"><Rating :rate="review.rating" :review="true" /></p>
+        <div class="container verticalCenter spaceRL">
+            <p class="bold spaceRL">{{review.author_name}}</p>
+            <p class="spaceRL"><Rating :rate="review.rating"/></p>
         </div>
-        <p class="bodrerRL">{{review.text}}</p>
+        <p class="spaceRL">{{review.text}}</p>
     </div>
 </template>
 

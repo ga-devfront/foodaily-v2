@@ -79,6 +79,10 @@ export default {
     margin-bottom: 10px;
 }
 
+.littleSpaceTop {
+    margin-top: 10px;
+}
+
 .spaceTop {
     margin-top: 40px;
 }
@@ -151,7 +155,7 @@ export default {
   height: 580px;
 }
 
-.bodrerRL {
+.spaceRL {
   margin-left: 5px;
   margin-right: 5px;
 }
