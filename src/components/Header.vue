@@ -1,6 +1,6 @@
 <template>
     <header class="container around verticalCenter flexWrap">
-        <a href="../">
+        <a v-on:click="$emit('reset', true)">
             <img src="../assets/logo.png" alt="logo Foodaily"/>
         </a>
         <nav>
@@ -32,7 +32,7 @@ nav a {
     padding: 0px 20px 0px 20px;
 }
 
-nav a:hover {
+a:hover {
     cursor: pointer;
 }
 
