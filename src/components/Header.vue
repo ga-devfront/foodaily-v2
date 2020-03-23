@@ -1,5 +1,5 @@
 <template>
-    <header class="container around verticalCenter">
+    <header class="container around verticalCenter flexWrap">
         <a href="../">
             <img src="../assets/logo.png" alt="logo Foodaily"/>
         </a>
@@ -60,5 +60,15 @@ nav a:hover {
 
 #subscribe:hover {
     background-color: #9d1a00;
+}
+
+@media (max-width: 1024px) {
+    nav {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    header {
+        height: 100px;
+    }
 }
 </style>

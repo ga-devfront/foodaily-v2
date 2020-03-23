@@ -71,6 +71,10 @@ export default {
             justify-content: space-between;
 }
 
+.container.flexWrap {
+    flex-wrap: wrap;
+}
+
 .spaceBottom {
     margin-bottom: 40px;
 }
