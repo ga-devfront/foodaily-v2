@@ -1,21 +1,43 @@
 <!DOCTYPE html>
 <html lang="fr">
   <head>
+    <title><%= htmlWebpackPlugin.options.title %></title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <meta name="description" content="Site de comparateur de restaurants en ligne." />
+    <meta name="keywords" content="comparateur, restaurant, nourriture, fastfood, manger" />
+    <meta name="theme-color" content="#0067c0" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://ag-dev.fr/openclassrooms/foodaily/">
+    <meta property="og:title" content="Foodaily">
+    <meta property="og:description" content="Site de comparateur de restaurants en ligne.">
+    <meta property="og:image" content="https://metatags.io/assets/meta-tags-16a33a6a8531e519cc0936fbba0ad904e52d35f34a46c97a2c9f6f7dd7d336f2.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://ag-dev.fr/openclassrooms/foodaily/">
+    <meta property="twitter:title" content="Foodaily">
+    <meta property="twitter:description" content="Site de comparateur de restaurants en ligne.">
+    <meta property="twitter:image" content="https://metatags.io/assets/meta-tags-16a33a6a8531e519cc0936fbba0ad904e52d35f34a46c97a2c9f6f7dd7d336f2.png">
+
     <link rel="stylesheet" href="<%= BASE_URL %>css/normalize.css" />
     <link rel="icon" href="<%= BASE_URL %>favicon.png" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.3/gh-fork-ribbon.min.css" />
-    <title><%= htmlWebpackPlugin.options.title %></title>
+    <link rel="canonical" href="<%= BASE_URL %>" />
+		<link rel="alternate" hreflang="fr" href="<%= BASE_URL %>" />
+
     <script type="text/javascript"
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBda9d2634kdu2xbQBVaCirqsmkSCrfzwQ&libraries=places"></script>
   </head>
   <body>
-    <a class="github-fork-ribbon" href="https://github.com/ga-devfront/foodaily-v2/" data-ribbon="Fork me on GitHub" title="Fork me on GitHub">Fork me on GitHub</a>
     <noscript>
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
+    <a class="github-fork-ribbon" href="https://github.com/ga-devfront/foodaily-v2/" data-ribbon="Fork me on GitHub" title="Fork me on GitHub">Fork me on GitHub</a>
     <div id="app"></div>
   </body>
 </html>
