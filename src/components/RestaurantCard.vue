@@ -87,7 +87,7 @@ p {
 
 @media (max-width: 1024px) {
   .littleRestaurant {
-    width: 350px;
+    width: 95%;
     height: 230px;
     font-size: 0.9em;
     flex-direction: column;

@@ -62,8 +62,10 @@
         </div>
         <form class="container column newReview">
         <div class="container verticalCenter spaceRight spaceLeft littleSpaceTop">
+          <div>
             <label class="bold spaceRL" for="username">Pseudo :</label>
-            <input class="input" type="text" name="username" id="username" required>
+            <input class="input" type="text" name="username" id="username" required></div>
+            <div class="container">
             <label class="bold spaceLeft">Note :</label>
             <div v-for="ref in [0, 1, 2, 3, 4]" class="star"
             @mouseover="mouseInRate(ref)"
@@ -75,7 +77,7 @@
               :style="{ width: (ref + 1 <= newReview.rating) ? '20px' : '0px' }"
               class="rate"
               :ref="ref"
-            >
+            ></div>
             </div>
           </div>
         </div><label class="bold spaceRight spaceLeft" for="review">Commentaire:</label>
@@ -322,5 +324,34 @@ export default {
 .reviewButton:hover {
     background-color: #007eea;
     cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+  article.container {
+    min-width: 90%;
+  }
+
+  #map {
+    height: 250px;
+    width: 350px;
+  }
+
+  .bigRestaurant {
+    width: 95%;
+    flex-wrap: wrap;
+  }
+
+  .newReview {
+    width: 95%;
+    flex-direction: column;
+  }
+
+  form>div {
+    flex-direction: column;
+  }
+
+  form>div>div {
+    margin-bottom: 10px;
+  }
 }
 </style>
