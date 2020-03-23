@@ -11,7 +11,7 @@
           >← Retour</a>
           <p id="resultNumber" class="bold">{{displayedRestaurants.length}} restaurants</p>
         </aside>
-        <section class="container around">
+        <section class="container around flexWrap">
           <Map
           :restaurants="displayedRestaurants"
           :research="city" class="spaceRight"
@@ -200,5 +200,11 @@ export default {
 .z1 {
   position: relative;
   z-index: 1;
+}
+
+@media (max-width: 1024px) {
+  .width75 {
+    max-width: 95%;
+  }
 }
 </style>

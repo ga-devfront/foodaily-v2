@@ -15,4 +15,9 @@ export default {
 </script>
 
 <style scoped>
+@media (max-width: 1024px) {
+  div {
+    font-size: 0.75em;
+  }
+}
 </style>
