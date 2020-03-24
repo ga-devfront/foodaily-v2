@@ -193,7 +193,6 @@ export default {
           }
           restaurantDetails.place_opening_hours = null;
           restaurantDetails.formatted_phone_number = null;
-          restaurantDetails.reviews = [];
           restaurantDetails.id = this.restaurant.id;
           this.$store.commit({ type: 'addRestaurant', dataType: 'details', restaurant: restaurantDetails });
           return resolve();
