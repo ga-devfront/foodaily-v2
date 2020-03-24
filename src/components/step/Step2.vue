@@ -53,17 +53,20 @@
             </article>
         </article>
         <h2 class="blue">Derniers avis</h2>
-        <div v-if="restaurantDetails.reviews">
+        <div class="container column verticalCenter" v-if="restaurantDetails.reviews">
         <!-- eslint-disable-next-line max-len -->
         <Review v-for="(review, index) in restaurantDetails.reviews" :review="review" :key="index" />
         </div>
-        <div v-if="!restaurantDetails.reviews">
+        <div class="container column verticalCenter" v-if="!restaurantDetails.reviews">
           <p>Aucun avis pour ce restaurant, soyez le premier à en poster un !</p>
         </div>
         <form class="container column newReview">
         <div class="container verticalCenter spaceRight spaceLeft littleSpaceTop">
+          <p v-if="error" class="red bold">{{errorMessage}}</p>
+          <div>
             <label class="bold spaceRL" for="username">Pseudo :</label>
-            <input class="input" type="text" name="username" id="username" required>
+            <input class="input" type="text" name="username" id="username" required></div>
+            <div class="container">
             <label class="bold spaceLeft">Note :</label>
             <div v-for="ref in [0, 1, 2, 3, 4]" class="star"
             @mouseover="mouseInRate(ref)"
@@ -75,7 +78,7 @@
               :style="{ width: (ref + 1 <= newReview.rating) ? '20px' : '0px' }"
               class="rate"
               :ref="ref"
-            >
+            ></div>
             </div>
           </div>
         </div><label class="bold spaceRight spaceLeft" for="review">Commentaire:</label>
@@ -113,6 +116,8 @@ export default {
         rating: 0,
         text: '',
       },
+      error: false,
+      errorMessage: '',
       details: {},
       map: null,
     };
@@ -191,7 +196,6 @@ export default {
           }
           restaurantDetails.place_opening_hours = null;
           restaurantDetails.formatted_phone_number = null;
-          restaurantDetails.reviews = [];
           restaurantDetails.id = this.restaurant.id;
           this.$store.commit({ type: 'addRestaurant', dataType: 'details', restaurant: restaurantDetails });
           return resolve();
@@ -232,6 +236,18 @@ export default {
       this.setMarker(this.restaurant);
     },
     emitReview() {
+      if (document.getElementById('username').value.length < 2) {
+        this.error = true;
+        this.errorMessage = 'Veuillez entrer un pseudo valide.';
+        return;
+      }
+      if (document.getElementById('review').value.length < 10) {
+        this.error = true;
+        this.errorMessage = 'Veuillez entrer un commentaire valide.';
+        return;
+      }
+      this.error = false;
+      this.errorMessage = '';
       this.newReview.author_name = document.getElementById('username').value;
       this.newReview.text = document.getElementById('review').value;
       const newReview = JSON.parse(JSON.stringify(this.newReview));
@@ -258,7 +274,7 @@ export default {
 
 .newReview {
   overflow: hidden;
-    width: 800px;
+  width: 800px;
   border-radius: 25px;
   min-height: 80px;
   background-color: #ffffff;
@@ -288,9 +304,6 @@ export default {
   border: solid 2px #ffffff;
   box-shadow: 2px 2px 0px 5px #0063bf;
   overflow: hidden;
-}
-.selfLeft {
-    align-self: flex-start;
 }
 
 .bigRestaurant {
@@ -322,5 +335,44 @@ export default {
 .reviewButton:hover {
     background-color: #007eea;
     cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+  article {
+    width: 100%;
+  }
+
+  #map {
+    height: 250px;
+    width: 100%;
+  }
+
+  .border {
+  border: solid 2px #0063bf;
+  box-shadow: 0px 0px 0px 0px ;
+  }
+
+  .photoContainer {
+    width: 100%;
+    background-color: #dbdbdb;
+  }
+
+  .bigRestaurant {
+    width: 95%;
+    flex-wrap: wrap;
+  }
+
+  .newReview {
+    width: 95%;
+    flex-direction: column;
+  }
+
+  form>div {
+    flex-direction: column;
+  }
+
+  form>div>div {
+    margin-bottom: 10px;
+  }
 }
 </style>

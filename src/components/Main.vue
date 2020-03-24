@@ -27,6 +27,12 @@ export default {
     Step1,
     Step2,
   },
+  props: {
+    reset: {
+      type: Boolean,
+      required: false,
+    },
+  },
   data() {
     return {
       steps: {
@@ -38,6 +44,16 @@ export default {
       currentRestaurant: null,
       search: null,
     };
+  },
+  watch: {
+    reset(val) {
+      if (val === true) {
+        this.currentStep = 0;
+        this.currentRestaurant = null;
+        this.search = null;
+        this.$emit('stopReset', true);
+      }
+    },
   },
   computed: {
     step() {

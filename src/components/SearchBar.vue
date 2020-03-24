@@ -107,4 +107,10 @@ form label {
     box-shadow: 0px 0px 15px #000000;
     border-radius: 20px;
 }
+
+@media (max-width: 1024px) {
+  .shadowBar {
+    width: 90%;
+  }
+}
 </style>

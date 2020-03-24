@@ -1,7 +1,7 @@
 <template>
   <body id="app" class="container column">
-    <myHeader />
-    <myMain />
+    <myHeader v-on:reset="resetOn"/>
+    <myMain v-on:stopReset="resetOff" :reset="reset"/>
     <myFooter />
   </body>
 </template>
@@ -17,6 +17,19 @@ export default {
     myHeader,
     myMain,
     myFooter,
+  },
+  data() {
+    return {
+      reset: false,
+    };
+  },
+  methods: {
+    resetOn() {
+      this.reset = true;
+    },
+    resetOff() {
+      this.reset = false;
+    },
   },
 };
 </script>
@@ -69,6 +82,10 @@ export default {
 .container.between {
     -webkit-box-pack: justify;
             justify-content: space-between;
+}
+
+.container.flexWrap {
+    flex-wrap: wrap;
 }
 
 .spaceBottom {

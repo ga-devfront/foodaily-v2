@@ -54,8 +54,9 @@ export default {
 
 <style scoped>
 p {
-  margin-block-end: 0.5em;
-  margin-block-start: 0.5em;
+  margin: 0;
+  margin-bottom: 0.5em;
+  margin-top: 0.5em;
 }
 
 .littleRestaurant {
@@ -82,5 +83,27 @@ p {
 
 .littleRestaurant .description {
     width: 310px;
+}
+
+@media (max-width: 1024px) {
+  .littleRestaurant {
+        border: solid 2px #0063bf;
+    box-shadow: 0px 0px 0px 0px;
+    width: 100%;
+    height: 230px;
+    font-size: 0.9em;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 10px;
+  }
+  .littleRestaurant .containerImg {
+    width: 100%;
+    min-height: 100px;
+    background: #dbdbdb;
+    justify-content: center;
+  }
+  .containerImg img {
+    align-self: center;
+  }
 }
 </style>

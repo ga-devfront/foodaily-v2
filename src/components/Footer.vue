@@ -56,7 +56,7 @@ export default {
 
 <style scoped>
 ul {
-  padding-inline-start: 0px
+  padding: 0px;
 }
 
 nav a:hover {
