@@ -49,6 +49,30 @@ Foodaily is a API project for school. I used vue.js for front developement and g
 ### [Footer](src/components/Footer.vue)
 * **[Social](src/components/Social.vue) :** social icon with link.
 
+## Quick Start
+### Install Node.js
+Download [Node.js](https://nodejs.org/en/download/) and follow the installation instructions if you haven't the v8.10.0 or higher.
+### Clone repository
+`$ git clone https://github.com/ga-devfront/foodaily-v2.git`
+### Install dependencies
+Run the following command to install all dependencies.
+
+`$ npm install`
+### Developer version
+Run the following command to launch vue and follow the gif to acced to the developper version of the project.
+
+`$ vue ui`
+
+![Launch developper version](https://ag-dev.fr/openclassrooms/github/img/launch_dev.gif)
+### Production version
+Run the following command to launch vue and follow the gif to creat a folder with the production version of the project.
+
+`$ vue ui`
+
+![Launch developper version](https://ag-dev.fr/openclassrooms/github/img/launch_prod.gif)
+### Online version
+If you want to see the actuel online version of the project just go to : https://ag-dev.fr/openclassrooms/foodaily/.
+
 ## Authors
 
 * **Guyomar Alexis** - [ga-devfront](https://github.com/ga-devfront)
