@@ -62,6 +62,7 @@
         </div>
         <form class="container column newReview">
         <div class="container verticalCenter spaceRight spaceLeft littleSpaceTop">
+          <p v-if="error" class="red bold">{{errorMessage}}</p>
           <div>
             <label class="bold spaceRL" for="username">Pseudo :</label>
             <input class="input" type="text" name="username" id="username" required></div>
@@ -115,6 +116,8 @@ export default {
         rating: 0,
         text: '',
       },
+      error: false,
+      errorMessage: '',
       details: {},
       map: null,
     };
@@ -233,6 +236,18 @@ export default {
       this.setMarker(this.restaurant);
     },
     emitReview() {
+      if (document.getElementById('username').value.length < 2) {
+        this.error = true;
+        this.errorMessage = 'Veuillez entrer un pseudo valide.';
+        return;
+      }
+      if (document.getElementById('review').value.length < 10) {
+        this.error = true;
+        this.errorMessage = 'Veuillez entrer un commentaire valide.';
+        return;
+      }
+      this.error = false;
+      this.errorMessage = '';
       this.newReview.author_name = document.getElementById('username').value;
       this.newReview.text = document.getElementById('review').value;
       const newReview = JSON.parse(JSON.stringify(this.newReview));
@@ -259,7 +274,7 @@ export default {
 
 .newReview {
   overflow: hidden;
-    width: 800px;
+  width: 800px;
   border-radius: 25px;
   min-height: 80px;
   background-color: #ffffff;
@@ -289,9 +304,6 @@ export default {
   border: solid 2px #ffffff;
   box-shadow: 2px 2px 0px 5px #0063bf;
   overflow: hidden;
-}
-.selfLeft {
-    align-self: flex-start;
 }
 
 .bigRestaurant {
