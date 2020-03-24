@@ -200,7 +200,7 @@ export default {
 
 @media (max-width: 1024px) {
   #mapContainer {
-    width: 350px;
+    width: 95%;
     height: 350px;
     position: relative;
     box-shadow: 0 0 0 0;
@@ -211,16 +211,16 @@ export default {
     margin-right: auto;
   }
   #map {
-    width: 350px;
+    width: 100%;
     height: 310px;
   }
 
   .mapButton {
-    width: 350px;
+    width: 100%;
   }
 
   .overlay.top {
-    width: 350px;
+    width: 100%;
     padding-left: 10px;
     padding-right: 10px;
   }

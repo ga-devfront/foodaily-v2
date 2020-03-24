@@ -53,11 +53,11 @@
             </article>
         </article>
         <h2 class="blue">Derniers avis</h2>
-        <div v-if="restaurantDetails.reviews">
+        <div class="container column verticalCenter" v-if="restaurantDetails.reviews">
         <!-- eslint-disable-next-line max-len -->
         <Review v-for="(review, index) in restaurantDetails.reviews" :review="review" :key="index" />
         </div>
-        <div v-if="!restaurantDetails.reviews">
+        <div class="container column verticalCenter" v-if="!restaurantDetails.reviews">
           <p>Aucun avis pour ce restaurant, soyez le premier à en poster un !</p>
         </div>
         <form class="container column newReview">
@@ -327,13 +327,23 @@ export default {
 }
 
 @media (max-width: 1024px) {
-  article.container {
-    min-width: 90%;
+  article {
+    width: 100%;
   }
 
   #map {
     height: 250px;
-    width: 350px;
+    width: 100%;
+  }
+
+  .border {
+  border: solid 2px #0063bf;
+  box-shadow: 0px 0px 0px 0px ;
+  }
+
+  .photoContainer {
+    width: 100%;
+    background-color: #dbdbdb;
   }
 
   .bigRestaurant {

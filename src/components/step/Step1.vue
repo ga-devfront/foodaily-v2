@@ -203,6 +203,10 @@ export default {
 }
 
 @media (max-width: 1024px) {
+  #resultList {
+    max-width: 95%;
+  }
+
   .width75 {
     max-width: 95%;
   }

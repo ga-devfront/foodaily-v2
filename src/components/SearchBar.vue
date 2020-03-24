@@ -110,7 +110,7 @@ form label {
 
 @media (max-width: 1024px) {
   .shadowBar {
-    width: 100%;
+    width: 90%;
   }
 }
 </style>
