@@ -22,10 +22,32 @@ Foodaily is a API project for school. I used vue.js for front developement and g
   * airbnb-base
   * vue/essential
 
-## Built With
+## Built with
 
 * [vue.js](https://vuejs.org/) - The Progressive JavaScript Framework
 * [Google Maps Platform](https://developers.google.com/maps/) - Used to generate Map
+
+## Detailed [App.vue](src/App.vue)
+
+### [Header](src/components/Header.vue)
+### [Main](src/components/Main.vue)
+* **[Step0](src/components/step/Step0.vue) :** home page which allows you to initiate the search.
+  * **[SearchBar](src/components/SearchBar.vue) :** search bar with google geolocation & autocomplet.
+  * **[Features](src/components/Features.vue) :** regroupe descriptions of site options.
+    * **[FeaturesCard](src/components/RestaurantCard.vue) :** card for site options with title and description.
+* **[Step1](src/components/step/Step1.vue) :** results page after the search (Step0).
+  * **[Map](src/components/Map.vue) :** google map with restaurants results & possibility to add a restaurant.
+    * **[NewRestaurantForm](src/components/NewRestaurantForm.vue) :** form for adding more details to the new restaurant.
+  * **[RestaurantCard](src/components/RestaurantCard.vue) :** cards with main restaurant informations.
+    * **[Rating](src/components/Rating.vue) :** indicate the current rating of the restaurant as well as its number of reviews.
+  * **[FilterResult](src/components/FilterResult.vue) :** allows to filter the results.
+  * **[Sort](src/components/Sort.vue) :** allows to sort the results.
+* **[Step2](src/components/step/Step2.vue) :** restaurant details page with possibility to add review.
+  * **[Rating](src/components/Rating.vue) :** indicate the current rating of the restaurant as well as its number of reviews.
+  * **[Review](src/components/Review.vue) :** displays restaurant reviews with rating and author.
+    * **[Rating](src/components/Rating.vue) :** indicate the current review rating.
+### [Footer](src/components/Footer.vue)
+* **[Social](src/components/Social.vue) :** social icon with link.
 
 ## Authors
 
@@ -35,4 +57,4 @@ See also the list of [contributors](https://github.com/ga-devfront/foodaily-v2//
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
