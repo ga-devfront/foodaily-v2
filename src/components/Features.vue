@@ -1,5 +1,5 @@
 <template>
-    <section class="container center spaceTop">
+    <section class="container center spaceTop flexWrap">
       <FeaturesCard v-for="card in cards" :card="card" :key="card.title"/>
     </section>
 </template>
@@ -26,7 +26,7 @@ export default {
         {
           title: 'reserver',
           img: Reserver,
-          presentation: 'Réservez votre table en ligne dans des restaurants du monde entier et profitez d’offres esclusives à Foodaily !',
+          presentation: 'Réservez votre table en ligne dans des restaurants du monde entier et profitez d’offres exclusives à Foodaily !',
         },
         {
           title: 'noter',

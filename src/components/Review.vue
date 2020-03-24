@@ -34,4 +34,10 @@ export default {
   border: solid 2px #0063bf;
   margin-bottom: 10px;
 }
+
+@media (max-width: 1024px) {
+  .review {
+    width: 95%;
+  }
+}
 </style>

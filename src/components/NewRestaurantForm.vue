@@ -188,4 +188,21 @@ form {
 .input:focus {
     outline: 0;
 }
+
+@media (max-width: 1024px) {
+  form {
+    font-size: 1em;
+    width: 90%;
+    height: 95%;
+  }
+
+  .big {
+    font-size: 1.5em;
+  }
+
+  .overlay.all {
+    width: 350px;
+    height: 350px;
+  }
+}
 </style>

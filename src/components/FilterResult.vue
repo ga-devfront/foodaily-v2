@@ -1,5 +1,5 @@
 <template>
-    <div class="container around littleSpaceBottom verticalCenter">
+    <div class="container around littleSpaceBottom verticalCenter flexWrap">
       <a class="bold container">Note :
         <div class="container center verticalCenter spaceRL">
           <div v-for="ref in [0, 1, 2, 3, 4]" class="star"
@@ -85,4 +85,9 @@ export default {
 </script>
 
 <style scoped>
+@media (max-width: 1024px) {
+  a {
+    margin-bottom: 10px;
+  }
+}
 </style>
