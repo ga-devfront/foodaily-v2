@@ -1,6 +1,6 @@
 # Foodaily
 
-Foodaily is a API project for school. I used vue.js for front developement and google API (map, places).
+Foodaily is an API project for school. I used vue.js for front development and google API (map, places).
 
 ## Badges
 
@@ -33,12 +33,12 @@ Foodaily is a API project for school. I used vue.js for front developement and g
 ### [Main](src/components/Main.vue)
 * **[Step0](src/components/step/Step0.vue) :** home page which allows you to initiate the search.
   * **[SearchBar](src/components/SearchBar.vue) :** search bar with google geolocation & autocomplet.
-  * **[Features](src/components/Features.vue) :** regroupe descriptions of site options.
+  * **[Features](src/components/Features.vue) :** regroup descriptions of site options.
     * **[FeaturesCard](src/components/RestaurantCard.vue) :** card for site options with title and description.
 * **[Step1](src/components/step/Step1.vue) :** results page after the search (Step0).
   * **[Map](src/components/Map.vue) :** google map with restaurants results & possibility to add a restaurant.
     * **[NewRestaurantForm](src/components/NewRestaurantForm.vue) :** form for adding more details to the new restaurant.
-  * **[RestaurantCard](src/components/RestaurantCard.vue) :** cards with main restaurant informations.
+  * **[RestaurantCard](src/components/RestaurantCard.vue) :** cards with main restaurant information.
     * **[Rating](src/components/Rating.vue) :** indicate the current rating of the restaurant as well as its number of reviews.
   * **[FilterResult](src/components/FilterResult.vue) :** allows to filter the results.
   * **[Sort](src/components/Sort.vue) :** allows to sort the results.
@@ -59,19 +59,19 @@ Run the following command to install all dependencies.
 
 `$ npm install`
 ### Developer version
-Run the following command to launch vue and follow the gif to acced to the developper version of the project.
+Run the following command to launch vue and follow the gif to accede to the developer version of the project.
 
 `$ vue ui`
 
-![Launch developper version](https://ag-dev.fr/openclassrooms/github/img/launch_dev.gif)
+![Launch developer version](https://ag-dev.fr/openclassrooms/github/img/launch_dev.gif)
 ### Production version
-Run the following command to launch vue and follow the gif to creat a folder with the production version of the project.
+Run the following command to launch vue and follow the gif to create a folder with the production version of the project.
 
 `$ vue ui`
 
-![Launch developper version](https://ag-dev.fr/openclassrooms/github/img/launch_prod.gif)
+![Launch production version](https://ag-dev.fr/openclassrooms/github/img/launch_prod.gif)
 ### Online version
-If you want to see the actuel online version of the project just go to : https://ag-dev.fr/openclassrooms/foodaily/.
+If you want to see the actual online version of the project just go to : https://ag-dev.fr/openclassrooms/foodaily/.
 
 ## Authors
 
@@ -81,4 +81,4 @@ See also the list of [contributors](https://github.com/ga-devfront/foodaily-v2//
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
