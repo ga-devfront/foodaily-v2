@@ -147,7 +147,6 @@ export default {
         radius: '800',
         type: ['restaurant'],
       };
-      console.log(position);
       /* eslint-disable-next-line */
       const service = new google.maps.places.PlacesService(document.createElement('div'));
       service.nearbySearch(request, (results, status, pagination) => {

@@ -109,7 +109,6 @@ export default {
       });
       map.addListener('center_changed', () => {
         const pos = JSON.parse(JSON.stringify(this.map.center));
-        console.log(pos);
         const { lat } = pos;
         const { lng } = pos;
         /* eslint-disable-next-line */
