@@ -188,7 +188,7 @@ export default {
             }
             if (place.reviews) {
               restaurantDetails.reviews = place.reviews;
-            }
+            } else { restaurantDetails.review = []; }
             restaurantDetails.id = this.restaurant.id;
             this.details = restaurantDetails;
             this.$store.commit({ type: 'addRestaurant', dataType: 'details', restaurant: restaurantDetails });
