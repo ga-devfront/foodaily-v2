@@ -57,7 +57,7 @@
         <!-- eslint-disable-next-line max-len -->
         <Review v-for="(review, index) in restaurantDetails.reviews" :review="review" :key="index" />
         </div>
-        <div class="container column verticalCenter" v-if="!restaurantDetails.reviews">
+        <div class="container column verticalCenter" v-if="restaurantDetails.reviews.length <= 0">
           <p>Aucun avis pour ce restaurant, soyez le premier à en poster un !</p>
         </div>
         <form class="container column newReview">
@@ -197,6 +197,7 @@ export default {
           restaurantDetails.place_opening_hours = null;
           restaurantDetails.formatted_phone_number = null;
           restaurantDetails.id = this.restaurant.id;
+          restaurantDetails.review = [];
           this.$store.commit({ type: 'addRestaurant', dataType: 'details', restaurant: restaurantDetails });
           return resolve();
         });
