@@ -99,7 +99,9 @@ export default {
           return restaurants.filter(() => true);
         },
         byStar(restaurants, star) {
-          return restaurants.filter((restaurant) => restaurant.rating > star);
+          const max = restaurants.filter((restaurant) => star.maxRate >= restaurant.rating);
+          const minMax = max.filter((restaurant) => restaurant.rating > star.minRate);
+          return minMax;
         },
         byNumberRating(restaurants, number) {
           return restaurants.filter((restaurant) => restaurant.user_ratings_total > number);
