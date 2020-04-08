@@ -107,6 +107,15 @@ export default {
         zoom: 16,
         styles: CustomMap,
       });
+      map.addListener('center_changed', () => {
+        const pos = JSON.parse(JSON.stringify(this.map.center));
+        console.log(pos);
+        const { lat } = pos;
+        const { lng } = pos;
+        /* eslint-disable-next-line */
+        const googleLatLng = new google.maps.LatLng(lat, lng);
+        this.$emit('newCenter', googleLatLng);
+      });
       this.map = map;
       if (this.restaurants.length) this.setMarker(this.restaurants);
     },
