@@ -16,8 +16,8 @@
 {
     "geometry": {
         "location": {
-            "lat": 46.1910469,
-            "lng": 6.233523
+            "lat": 46.1916989,
+            "lng": 6.229865999999999
         }
     },
     "id": "MYJSON_987654321",
@@ -26,5 +26,5 @@
     "place_id": "MYJSON_987654321",
     "rating": 3.5,
     "user_ratings_total": 125,
-    "vicinity": "1 Rue Ampère, Annemasse"
+    "vicinity": "16 Rue du Salève, Annemasse"
 }]
