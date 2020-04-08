@@ -1,21 +1,25 @@
 <template>
     <div class="container around littleSpaceBottom verticalCenter flexWrap">
-      <a class="bold container">Note :
-        <div class="container center verticalCenter spaceRL">
-          <div v-for="ref in [0, 1, 2, 3, 4]" class="star"
-            @mouseover="mouseInRate(ref)"
-            @mouseout="mouseOutRate(ref)"
-            @click="setRate(ref)"
-            :key="ref"
-          >
-            <div
-              :style="{ width: (ref + 1 <= minRate) ? '20px' : '0px' }"
-              class="rate"
-              :ref="ref"
-            >
-            </div>
-          </div>
-    </div></a>
+ <a class="bold">Note entre :
+          <select v-model="minRate">
+  <option :value='0'>0</option>
+  <option :value='1'>1</option>
+  <option :value="2">2</option>
+  <option :value="3">3</option>
+  <option :value="4">4</option>
+  <option :value="5">5</option>
+</select>
+</a>
+ <a class="bold"> et
+          <select v-model="maxRate">
+  <option :value='0'>0</option>
+  <option :value='1'>1</option>
+  <option :value="2">2</option>
+  <option :value="3">3</option>
+  <option :value="4">4</option>
+  <option :value="5">5</option>
+</select>
+</a>
         <a class="bold">Avis :
           <select v-model="numberOfRate">
   <option :value='10'>plus de 10</option>
@@ -46,12 +50,14 @@ export default {
     return {
       numberOfRate: 0,
       minRate: 0,
+      maxRate: 5,
     };
   },
   methods: {
     reset() {
       this.numberOfRate = 0;
       this.minRate = 0;
+      this.maxRate = 5;
       this.emitFilter();
     },
     emitFilter() {
@@ -59,25 +65,38 @@ export default {
       if (this.numberOfRate) {
         filter.push({ type: 'byNumberRating', value: this.numberOfRate });
       }
-      if (this.minRate) {
-        filter.push({ type: 'byStar', value: this.minRate });
+      if (this.minRate || this.maxRate < 5) {
+        filter.push({ type: 'byStar', value: { minRate: this.minRate, maxRate: this.maxRate } });
       }
       if (!filter) {
         filter.push({ type: 'all', value: 'null' });
       }
       this.$emit('filter', filter);
     },
-    setRate(value) {
+    setMinRate(value) {
       this.minRate = value + 1;
     },
-    mouseInRate(value) {
+    setMaxRate(value) {
+      this.maxRate = value + 1;
+    },
+    mouseInMinRate(value) {
       for (let x = 0; x < value + 1; x += 1) {
         this.$refs[x][0].style.width = '20px';
       }
     },
-    mouseOutRate(value) {
+    mouseOutMinRate(value) {
       for (let x = 0; x < value + 1; x += 1) {
         if (x + 1 > this.minRate) this.$refs[x][0].style.width = '0px';
+      }
+    },
+    mouseInMaxRate(value) {
+      for (let x = 0; x < value + 1; x += 1) {
+        this.$refs[x][0].style.width = '0px';
+      }
+    },
+    mouseOutMaxRate(value) {
+      for (let x = 0; x < value + 1; x += 1) {
+        if (x + 1 > this.minRate) this.$refs[x][0].style.width = '20px';
       }
     },
   },
