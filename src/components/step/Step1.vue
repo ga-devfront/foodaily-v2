@@ -13,6 +13,7 @@
         </aside>
         <section class="container around flexWrap">
           <Map
+          v-on:newCenter="searchRestaurant"
           :restaurants="displayedRestaurants"
           :research="city" class="spaceRight"
           v-on:restaurant="emitRestaurant"
@@ -140,6 +141,25 @@ export default {
     displaySort() {
       this.sortOption = !this.sortOption;
     },
+    searchRestaurant(position) {
+      const request = {
+        location: position,
+        radius: '800',
+        type: ['restaurant'],
+      };
+      console.log(position);
+      /* eslint-disable-next-line */
+      const service = new google.maps.places.PlacesService(document.createElement('div'));
+      service.nearbySearch(request, (results, status, pagination) => {
+      /* eslint-disable-next-line */
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+          results.forEach((restaurant) => {
+            this.$store.commit({ type: 'addRestaurant', dataType: 'summary', restaurant });
+          });
+          pagination.nextPage();
+        }
+      });
+    },
   },
   created() {
     RestaurantJson.forEach((restaurant) => {
@@ -147,22 +167,7 @@ export default {
     });
     /* eslint-disable-next-line */
     const pos = new google.maps.LatLng(this.city.latitude,this.city.longitude);
-    const request = {
-      location: pos,
-      radius: '800',
-      type: ['restaurant'],
-    };
-    /* eslint-disable-next-line */
-      const service = new google.maps.places.PlacesService(document.createElement('div'));
-    service.nearbySearch(request, (results, status, pagination) => {
-      /* eslint-disable-next-line */
-      if (status === google.maps.places.PlacesServiceStatus.OK) {
-        results.forEach((restaurant) => {
-          this.$store.commit({ type: 'addRestaurant', dataType: 'summary', restaurant });
-        });
-        pagination.nextPage();
-      }
-    });
+    this.searchRestaurant(pos);
   },
 };
 </script>
