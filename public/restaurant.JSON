@@ -7,10 +7,10 @@
     },
     "id": "MYJSON_12345789",
     "name": "mon restaurant 1",
-    "photos": "../../../public/restaurant2.jpg",
+    "photos": [{"getUrl": "/restaurant1.jpg"}],
     "place_id": "MYJSON_12345789",
-    "rating": null,
-    "user_ratings_total:": null,
+    "rating": 4,
+    "user_ratings_total": 8,
     "vicinity": "5 Rue d'Etrembières, Annemasse"
 },
 {
@@ -22,9 +22,9 @@
     },
     "id": "MYJSON_987654321",
     "name": "mon restaurant 2",
-    "photos": "../../../public/restaurant2.jpg",
+    "photos": [{"getUrl": "/restaurant2.jpg"}],
     "place_id": "MYJSON_987654321",
-    "rating": null,
-    "user_ratings_total:": null,
+    "rating": 3.5,
+    "user_ratings_total": 125,
     "vicinity": "1 Rue Ampère, Annemasse"
 }]
