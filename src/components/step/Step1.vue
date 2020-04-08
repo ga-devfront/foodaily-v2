@@ -49,6 +49,7 @@
 </template>
 
 <script>
+import RestaurantJson from '../../../public/restaurant.JSON';
 import Map from '../Map.vue';
 import RestaurantCard from '../RestaurantCard.vue';
 import FilterResult from '../FilterResult.vue';
@@ -139,6 +140,9 @@ export default {
     },
   },
   created() {
+    RestaurantJson.forEach((restaurant) => {
+      this.$store.commit({ type: 'addRestaurant', dataType: 'summary', restaurant });
+    });
     /* eslint-disable-next-line */
     const pos = new google.maps.LatLng(this.city.latitude,this.city.longitude);
     const request = {

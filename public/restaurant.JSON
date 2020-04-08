@@ -1,0 +1,30 @@
+[{
+    "geometry": {
+        "location": {
+            "lat": 46.1910469,
+            "lng": 6.233523
+        }
+    },
+    "id": "MYJSON_12345789",
+    "name": "mon restaurant 1",
+    "photos": [{"getUrl": "/restaurant1.jpg"}],
+    "place_id": "MYJSON_12345789",
+    "rating": 4,
+    "user_ratings_total": 8,
+    "vicinity": "5 Rue d'Etrembières, Annemasse"
+},
+{
+    "geometry": {
+        "location": {
+            "lat": 46.1916989,
+            "lng": 6.229865999999999
+        }
+    },
+    "id": "MYJSON_987654321",
+    "name": "mon restaurant 2",
+    "photos": [{"getUrl": "/restaurant2.jpg"}],
+    "place_id": "MYJSON_987654321",
+    "rating": 3.5,
+    "user_ratings_total": 125,
+    "vicinity": "16 Rue du Salève, Annemasse"
+}]
