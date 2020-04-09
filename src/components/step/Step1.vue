@@ -13,6 +13,7 @@
         </aside>
         <section class="container around flexWrap">
           <Map
+          v-on:newCenter="searchRestaurant"
           :restaurants="displayedRestaurants"
           :research="city" class="spaceRight"
           v-on:restaurant="emitRestaurant"
@@ -49,6 +50,7 @@
 </template>
 
 <script>
+import RestaurantJson from '../../../public/restaurant.JSON';
 import Map from '../Map.vue';
 import RestaurantCard from '../RestaurantCard.vue';
 import FilterResult from '../FilterResult.vue';
@@ -98,7 +100,9 @@ export default {
           return restaurants.filter(() => true);
         },
         byStar(restaurants, star) {
-          return restaurants.filter((restaurant) => restaurant.rating > star);
+          const max = restaurants.filter((restaurant) => star.maxRate >= restaurant.rating);
+          const minMax = max.filter((restaurant) => restaurant.rating > star.minRate);
+          return minMax;
         },
         byNumberRating(restaurants, number) {
           return restaurants.filter((restaurant) => restaurant.user_ratings_total > number);
@@ -137,26 +141,32 @@ export default {
     displaySort() {
       this.sortOption = !this.sortOption;
     },
-  },
-  created() {
-    /* eslint-disable-next-line */
-    const pos = new google.maps.LatLng(this.city.latitude,this.city.longitude);
-    const request = {
-      location: pos,
-      radius: '800',
-      type: ['restaurant'],
-    };
-    /* eslint-disable-next-line */
+    searchRestaurant(position) {
+      const request = {
+        location: position,
+        radius: '600',
+        type: ['restaurant'],
+      };
+      /* eslint-disable-next-line */
       const service = new google.maps.places.PlacesService(document.createElement('div'));
-    service.nearbySearch(request, (results, status, pagination) => {
+      service.nearbySearch(request, (results, status, pagination) => {
       /* eslint-disable-next-line */
       if (status === google.maps.places.PlacesServiceStatus.OK) {
-        results.forEach((restaurant) => {
-          this.$store.commit({ type: 'addRestaurant', dataType: 'summary', restaurant });
-        });
-        pagination.nextPage();
-      }
+          results.forEach((restaurant) => {
+            this.$store.commit({ type: 'addRestaurant', dataType: 'summary', restaurant });
+          });
+          pagination.nextPage();
+        }
+      });
+    },
+  },
+  created() {
+    RestaurantJson.forEach((restaurant) => {
+      this.$store.commit({ type: 'addRestaurant', dataType: 'summary', restaurant });
     });
+    /* eslint-disable-next-line */
+    const pos = new google.maps.LatLng(this.city.latitude,this.city.longitude);
+    this.searchRestaurant(pos);
   },
 };
 </script>
