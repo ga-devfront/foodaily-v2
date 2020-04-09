@@ -144,7 +144,7 @@ export default {
     searchRestaurant(position) {
       const request = {
         location: position,
-        radius: '800',
+        radius: '600',
         type: ['restaurant'],
       };
       /* eslint-disable-next-line */
