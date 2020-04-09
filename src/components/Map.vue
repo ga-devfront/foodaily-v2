@@ -78,25 +78,21 @@ export default {
   },
   methods: {
     setMarker(restaurants) {
-      let count = 0;
       restaurants.forEach((place) => {
-        count += 1;
-        window.setTimeout(() => {
-          if (!this.markers.some((marker) => place.id === marker.id)) {
+        if (!this.markers.some((marker) => place.id === marker.id)) {
           /* eslint-disable-next-line */
           let newMarker = new google.maps.Marker({
-              map: this.map,
-              position: place.geometry.location,
-              icon: MapIcon,
-              title: place.name,
-            });
-            newMarker.addListener('click', () => {
-              this.$emit('restaurant', place);
-            });
-            newMarker.id = place.id;
-            this.markers.push(newMarker);
-          }
-        }, 200 * count);
+            map: this.map,
+            position: place.geometry.location,
+            icon: MapIcon,
+            title: place.name,
+          });
+          newMarker.addListener('click', () => {
+            this.$emit('restaurant', place);
+          });
+          newMarker.id = place.id;
+          this.markers.push(newMarker);
+        }
       });
     },
     async setMap() {
@@ -107,7 +103,7 @@ export default {
         zoom: 16,
         styles: CustomMap,
       });
-      map.addListener('center_changed', () => {
+      map.addListener('dragend', () => {
         const pos = JSON.parse(JSON.stringify(this.map.center));
         const { lat } = pos;
         const { lng } = pos;
